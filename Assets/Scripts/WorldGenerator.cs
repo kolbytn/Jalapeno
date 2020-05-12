@@ -14,6 +14,7 @@ public class WorldGenerator : MonoBehaviour
     int tileCount = 2;
     double waterProbability = .001;
     double rockProbability = .001;
+    double treeProbability = .005;
     double obstacleSizeMean = 10;
     double obstacleSizeStd = 5;
 
@@ -24,6 +25,8 @@ public class WorldGenerator : MonoBehaviour
 
     void GenerateWorld()
     {
+        GameObject treePrefab = Resources.Load<GameObject>("Prefabs/tree");
+
         Tile blank = Resources.Load<Tile>("Tiles/Test/1bit_small_63");
         Tile grass = Resources.Load<Tile>("Tiles/Test/1bit_small_6");
 
@@ -101,6 +104,7 @@ public class WorldGenerator : MonoBehaviour
                 {
                     Tile[] tiles = new Tile[] { water_bottom_right, water_bottom, water_bottom_left, water_right, water, water_left, water_top_right, water_top, water_top_left };
                     GenerateObstacle(tiles, blocked, i, j);
+                    continue;
                 }
 
                 // Add rock
@@ -108,6 +112,14 @@ public class WorldGenerator : MonoBehaviour
                 {
                     Tile[] tiles = new Tile[] { rock_bottom_right, rock, rock_bottom_left, rock, rock, rock, rock_top_right, rock, rock_top_left };
                     GenerateObstacle(tiles, blocked, i, j);
+                    continue;
+                }
+
+                if (UnityEngine.Random.value < treeProbability)
+                {
+                    GameObject treeObject = Instantiate(treePrefab, new Vector3(i, j, 0), Quaternion.identity);
+                    blocked[i, j] = true;
+                    continue;
                 }
             }
         }
