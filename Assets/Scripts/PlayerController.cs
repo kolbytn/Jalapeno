@@ -2,9 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5;
+
+    public float max_health = 100;
+    public float max_hunger = 100;
+
+    public UiBar health_bar;
+    public UiBar hunger_bar;
+    float health;
+    float hunger;
+    float hunger_speed = 0.1f;
 
     Rigidbody2D rigidbody2d;
     float horizontal = 0;
@@ -15,12 +25,23 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        health = max_health;
+        hunger = max_hunger;
 
+        health_bar.initializeValues(max_health, health);
+        hunger_bar.initializeValues(max_hunger, hunger);
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (hunger > 0)
+        {
+            hunger -= hunger_speed * Time.deltaTime;
+            hunger_bar.updateValue(hunger);
+        }
+
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         
