@@ -48,6 +48,7 @@ public class WorldGenerator : MonoBehaviour
 
         int[,] map = new int[width, height];
         bool[,] blocked = new bool[width, height];
+
         for (int i = -10; i < map.GetUpperBound(0) + 10; i++)
         {
             for (int j = -10; j < map.GetUpperBound(1) + 10; j++)

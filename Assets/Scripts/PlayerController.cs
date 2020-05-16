@@ -28,8 +28,8 @@ public class PlayerController : MonoBehaviour
         health = max_health;
         hunger = max_hunger;
 
-        health_bar.initializeValues(max_health, health);
-        hunger_bar.initializeValues(max_hunger, hunger);
+        //health_bar.initializeValues(max_health, health);
+        //hunger_bar.initializeValues(max_hunger, hunger);
     }
 
     // Update is called once per frame
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
         if (hunger > 0)
         {
             hunger -= hunger_speed * Time.deltaTime;
-            hunger_bar.updateValue(hunger);
+            //hunger_bar.updateValue(hunger);
         }
 
         horizontal = Input.GetAxis("Horizontal");
