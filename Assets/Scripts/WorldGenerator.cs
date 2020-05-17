@@ -23,6 +23,11 @@ public class WorldGenerator : MonoBehaviour
         GenerateWorld();
     }
 
+    public void LoadWorld(string fileName)
+    {
+
+    }
+
     void GenerateWorld()
     {
         GameObject treePrefab = Resources.Load<GameObject>("Prefabs/tree");
@@ -47,6 +52,7 @@ public class WorldGenerator : MonoBehaviour
         Tile rock = Resources.Load<Tile>("Tiles/Test/1bit_small_29");
 
         int[,] map = new int[width, height];
+        List<GameObject> objects = new List<GameObject>();
         bool[,] blocked = new bool[width, height];
 
         for (int i = -10; i < map.GetUpperBound(0) + 10; i++)
@@ -116,14 +122,19 @@ public class WorldGenerator : MonoBehaviour
                     continue;
                 }
 
+                // Add tree objects
                 if (UnityEngine.Random.value < treeProbability)
                 {
                     GameObject treeObject = Instantiate(treePrefab, new Vector3(i, j, 0), Quaternion.identity);
                     blocked[i, j] = true;
+                    objects.Add(treeObject);
                     continue;
                 }
             }
         }
+
+        GameInfo.Instance.Map = map;
+        GameInfo.Instance.Objects = objects.ToArray();
     }
 
     void GenerateObstacle(Tile[] tiles, bool[,] blocked, int locationX, int locationY)
