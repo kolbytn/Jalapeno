@@ -18,6 +18,7 @@ public class WorldGenerator : MonoBehaviour
     double bushProbability = .005;
     double obstacleSizeMean = 10;
     double obstacleSizeStd = 5;
+    GameObject[,] ObjectMap;
 
     void Start()
     {
@@ -56,6 +57,9 @@ public class WorldGenerator : MonoBehaviour
         int[,] map = new int[width, height];
         List<GameObject> objects = new List<GameObject>();
         bool[,] blocked = new bool[width, height];
+        ObjectMap = new GameObject[width, height];
+
+
 
         for (int i = -10; i < map.GetUpperBound(0) + 10; i++)
         {
@@ -127,21 +131,28 @@ public class WorldGenerator : MonoBehaviour
                 // Add tree objects
                 if (UnityEngine.Random.value < treeProbability)
                 {
-                    GameObject treeObject = Instantiate(treePrefab, new Vector3(i, j, 0), Quaternion.identity);
+                    Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
+                    GameObject treeObject = Instantiate(treePrefab, location, Quaternion.identity);
                     blocked[i, j] = true;
                     objects.Add(treeObject);
+                    ObjectMap[i, j] = treeObject;
                     continue;
                 }
-
-                if (UnityEngine.Random.value < bushProbability)
+                else if (UnityEngine.Random.value < bushProbability)
                 {
-                    GameObject bushObject = Instantiate(bushPrefab, new Vector3(i, j, 0), Quaternion.identity);
+                    Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
+                    GameObject bushObject = Instantiate(bushPrefab, location, Quaternion.identity);
                     blocked[i, j] = true;
                     if (UnityEngine.Random.value < 0.5)
                     {
                         bushObject.GetComponent<BerryBushController>().RemoveBerries();
                     }
+                    ObjectMap[i, j] = bushObject;
                     continue;
+                }
+                else
+                {
+                    ObjectMap[i, j] = null;
                 }
             }
         }
@@ -201,5 +212,15 @@ public class WorldGenerator : MonoBehaviour
                 blocked[i, j] = true;
             }
         }
+    }
+
+    public GameObject GetGameObjectAt(int i, int j)
+    {
+        return ObjectMap[i, j];
+    }
+
+    public Vector3 GetCellLocation(int i, int j)
+    {
+        return tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
     }
 }

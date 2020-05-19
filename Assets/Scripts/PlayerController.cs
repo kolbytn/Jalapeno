@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5;
 
     public float max_health = 100;
     public float max_hunger = 100;
+
+    public WorldGenerator worldGenerator;
 
     public UiBar health_bar;
     public UiBar hunger_bar;
@@ -20,6 +21,9 @@ public class PlayerController : MonoBehaviour
     float horizontal = 0;
     float vertical = 0;
     float look_angle = 0;
+
+    int row = 0;
+    int column = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +39,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CalcGridPosition();
 
         if (hunger > 0)
         {
@@ -67,5 +72,30 @@ public class PlayerController : MonoBehaviour
         //rigidbody2d.transform.center
         //transform.position = new_position;
         //transform.rotation = Quaternion.Euler(0, 0, look_angle);
+    }
+
+    void CalcGridPosition()
+    {
+        float closest_dist = 1000;
+        int new_row=0;
+        int new_col=0;
+        for(int i=-1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                Vector3 cell_loc = worldGenerator.GetCellLocation(row+i, column+j);
+                float dist = Vector3.Distance(cell_loc, transform.position);
+                if (dist < closest_dist)
+                {
+                    closest_dist = dist;
+                    new_row = row + i;
+                    new_col = column + j;
+                }
+            }
+        }
+        row = new_row;
+        column = new_col;
+
+        //Debug.Log(new_row + ", " + new_col);
     }
 }
