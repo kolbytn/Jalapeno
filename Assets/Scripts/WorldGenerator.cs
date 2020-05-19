@@ -15,6 +15,7 @@ public class WorldGenerator : MonoBehaviour
     double waterProbability = .001;
     double rockProbability = .001;
     double treeProbability = .005;
+    double bushProbability = .005;
     double obstacleSizeMean = 10;
     double obstacleSizeStd = 5;
 
@@ -26,6 +27,7 @@ public class WorldGenerator : MonoBehaviour
     void GenerateWorld()
     {
         GameObject treePrefab = Resources.Load<GameObject>("Prefabs/tree");
+        GameObject bushPrefab = Resources.Load<GameObject>("Prefabs/BerryBush");
 
         Tile blank = Resources.Load<Tile>("Tiles/Test/1bit_small_63");
         Tile grass = Resources.Load<Tile>("Tiles/Test/1bit_small_6");
@@ -120,6 +122,17 @@ public class WorldGenerator : MonoBehaviour
                 {
                     GameObject treeObject = Instantiate(treePrefab, new Vector3(i, j, 0), Quaternion.identity);
                     blocked[i, j] = true;
+                    continue;
+                }
+
+                if (UnityEngine.Random.value < bushProbability)
+                {
+                    GameObject bushObject = Instantiate(bushPrefab, new Vector3(i, j, 0), Quaternion.identity);
+                    blocked[i, j] = true;
+                    if (UnityEngine.Random.value < 0.5)
+                    {
+                        bushObject.GetComponent<BerryBushController>().RemoveBerries();
+                    }
                     continue;
                 }
             }

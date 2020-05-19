@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
         if (hunger > 0)
         {
             hunger -= hunger_speed * Time.deltaTime;
-            //hunger_bar.updateValue(hunger);
+            hunger_bar.updateValue(hunger);
         }
 
         horizontal = Input.GetAxis("Horizontal");
