@@ -1,14 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EventSystem : MonoBehaviour
 {
     public GameObject gameMenu;
+    public Button saveButton;
+    public Button loadButton;
+    public Button exitButton;
 
     private bool isVisible = false;
 
-    // Update is called once per frame
+    void Start()
+    {
+        Button saveBtn = saveButton.GetComponent<Button>();
+        saveBtn.onClick.AddListener(SaveGame);
+        Button loadBtn = loadButton.GetComponent<Button>();
+        loadBtn.onClick.AddListener(LoadGame);
+        Button exitBtn = exitButton.GetComponent<Button>();
+        exitBtn.onClick.AddListener(ExitGame);
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -21,5 +34,22 @@ public class EventSystem : MonoBehaviour
         }
 
         gameMenu.SetActive(isVisible);
+    }
+
+    void SaveGame()
+    {
+        //GameInfo.Instance.SaveGameToFile("");
+        Debug.Log("Save Game");
+    }
+
+    void LoadGame()
+    {
+        //GameInfo.Instance.LoadGameFromFile("");
+        Debug.Log("Load Game");
+    }
+
+    void ExitGame()
+    {
+        Application.Quit();
     }
 }
