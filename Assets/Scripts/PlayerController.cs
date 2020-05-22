@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
 
     void CalcGridPosition()
     {
+        // loops through the surrounding grid locations and checks to see which one is closest and updates row and column
         float closest_dist = 1000;
         int new_row=0;
         int new_col=0;
