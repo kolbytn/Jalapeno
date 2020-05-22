@@ -13,4 +13,36 @@ public class Utils : MonoBehaviour
         double randNormal = mean + std * randStdNormal;
         return randNormal;
     }
+
+    public static T[] Flatten2dArray<T>(T[,] array)
+    {
+        T[] flattened = new T[array.Length];
+
+        int write = 0;
+        for (int i = 0; i <= array.GetUpperBound(0); i++)
+        {
+            for (int j = 0; j <= array.GetUpperBound(1); j++)
+            {
+                flattened[write++] = array[i, j];
+            }
+        }
+
+        return flattened;
+    }
+
+    public static T[,] Reshape2dArray<T>(T[] array, int width, int height)
+    {
+        T[,] reshaped = new T[width, height];
+
+        int read = 0;
+        for (int i = 0; i <= reshaped.GetUpperBound(0); i++)
+        {
+            for (int j = 0; j <= reshaped.GetUpperBound(1); j++)
+            {
+                reshaped[i, j] = array[read++];
+            }
+        }
+
+        return reshaped;
+    }
 }

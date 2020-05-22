@@ -38,13 +38,13 @@ public class EventSystem : MonoBehaviour
 
     void SaveGame()
     {
-        //GameInfo.Instance.SaveGameToFile("");
+        GameInfo.Instance.SaveGameToFile("test.json");
         Debug.Log("Save Game");
     }
 
     void LoadGame()
     {
-        //GameInfo.Instance.LoadGameFromFile("");
+        GameInfo.Instance.LoadGameFromFile("test.json");
         Debug.Log("Load Game");
     }
 

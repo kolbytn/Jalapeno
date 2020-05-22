@@ -14,14 +14,17 @@ public class WorldGenerator : MonoBehaviour
     int tileCount = 2;
     double waterProbability = .001;
     double rockProbability = .001;
-    double treeProbability = .005;
+    //double treeProbability = .005;
     double bushProbability = .005;
     double obstacleSizeMean = 10;
     double obstacleSizeStd = 5;
-    GameObject[,] ObjectMap;
+    GameInfo gameInfo;
 
     void Start()
     {
+        gameInfo = GameInfo.Instance;
+        gameInfo.GroundMap = new int[width, height];
+        gameInfo.ObjectMap = new IWorldObject[width, height];
         GenerateWorld();
     }
 
@@ -54,33 +57,28 @@ public class WorldGenerator : MonoBehaviour
         Tile rock_bottom_left = Resources.Load<Tile>("Tiles/Test/1bit_small_38");
         Tile rock = Resources.Load<Tile>("Tiles/Test/1bit_small_29");
 
-        int[,] map = new int[width, height];
-        List<GameObject> objects = new List<GameObject>();
         bool[,] blocked = new bool[width, height];
-        ObjectMap = new GameObject[width, height];
 
-
-
-        for (int i = -10; i < map.GetUpperBound(0) + 10; i++)
+        for (int i = -10; i < gameInfo.GroundMap.GetUpperBound(0) + 10; i++)
         {
-            for (int j = -10; j < map.GetUpperBound(1) + 10; j++)
+            for (int j = -10; j < gameInfo.GroundMap.GetUpperBound(1) + 10; j++)
             {
                 // Set bounds
-                if (i < 0 || i >= map.GetUpperBound(0) || j < 0 || j >= map.GetUpperBound(1))
+                if (i < 0 || i >= gameInfo.GroundMap.GetUpperBound(0) || j < 0 || j >= gameInfo.GroundMap.GetUpperBound(1))
                 {
-                    if (i == -1 && j > -1 && j < map.GetUpperBound(1))
+                    if (i == -1 && j > -1 && j < gameInfo.GroundMap.GetUpperBound(1))
                     {
                         tilemap.SetTile(new Vector3Int(i, j, 0), water_left);
                     }
-                    else if (i == map.GetUpperBound(0) && j > -1 && j < map.GetUpperBound(1))
+                    else if (i == gameInfo.GroundMap.GetUpperBound(0) && j > -1 && j < gameInfo.GroundMap.GetUpperBound(1))
                     {
                         tilemap.SetTile(new Vector3Int(i, j, 0), water_right);
                     }
-                    else if (j == -1 && i > -1 && i < map.GetUpperBound(1))
+                    else if (j == -1 && i > -1 && i < gameInfo.GroundMap.GetUpperBound(1))
                     {
                         tilemap.SetTile(new Vector3Int(i, j, 0), water_bottom);
                     }
-                    else if (j == map.GetUpperBound(1) && i > -1 && i < map.GetUpperBound(1))
+                    else if (j == gameInfo.GroundMap.GetUpperBound(1) && i > -1 && i < gameInfo.GroundMap.GetUpperBound(1))
                     {
                         tilemap.SetTile(new Vector3Int(i, j, 0), water_top);
                     }
@@ -129,36 +127,32 @@ public class WorldGenerator : MonoBehaviour
                 }
 
                 // Add tree objects
-                if (UnityEngine.Random.value < treeProbability)
-                {
-                    Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
-                    GameObject treeObject = Instantiate(treePrefab, location, Quaternion.identity);
-                    blocked[i, j] = true;
-                    objects.Add(treeObject);
-                    ObjectMap[i, j] = treeObject;
-                    continue;
-                }
+                //if (UnityEngine.Random.value < treeProbability)
+                //{
+                //    Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
+                //    GameObject treeObject = Instantiate(treePrefab, location, Quaternion.identity);
+                //    blocked[i, j] = true;
+                //    gameInfo.ObjectMap[i, j] = treeObject;
+                //    continue;
+                //}
                 else if (UnityEngine.Random.value < bushProbability)
                 {
                     Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
-                    GameObject bushObject = Instantiate(bushPrefab, location, Quaternion.identity);
+                    BerryBush bushObject = Instantiate(bushPrefab, location, Quaternion.identity).GetComponent<BerryBush>();
                     blocked[i, j] = true;
                     if (UnityEngine.Random.value < 0.5)
                     {
-                        bushObject.GetComponent<BerryBushController>().RemoveBerries();
+                        bushObject.RemoveBerries();
                     }
-                    ObjectMap[i, j] = bushObject;
+                    gameInfo.ObjectMap[i, j] = bushObject;
                     continue;
                 }
                 else
                 {
-                    ObjectMap[i, j] = null;
+                    gameInfo.ObjectMap[i, j] = null;
                 }
             }
         }
-
-        GameInfo.Instance.Map = map;
-        GameInfo.Instance.Objects = objects.ToArray();
     }
 
     void GenerateObstacle(Tile[] tiles, bool[,] blocked, int locationX, int locationY)
@@ -216,7 +210,7 @@ public class WorldGenerator : MonoBehaviour
 
     public GameObject GetGameObjectAt(int i, int j)
     {
-        return ObjectMap[i, j];
+        return ((MonoBehaviour)gameInfo.ObjectMap[i, j]).gameObject;
     }
 
     public Vector3 GetCellLocation(int i, int j)
