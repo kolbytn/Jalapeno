@@ -14,9 +14,7 @@ public class BerryBush : WorldObject
         public bool hasBerries;
         public float regrowCount;
     }
-
-    public Sprite EmptyBushSprite;
-    public Sprite FullBushSprite;
+    public Animator animator;
 
     bool hasBerries = true;
     float regrowCount = 0;
@@ -25,6 +23,7 @@ public class BerryBush : WorldObject
 
     void Start()
     {
+        animator.SetBool("HasBerries", hasBerries);
     }
 
     void Update()
@@ -34,9 +33,9 @@ public class BerryBush : WorldObject
             regrowCount += regrowSpeed * Time.deltaTime;
             if (regrowCount > regrowMax)
             {
+                animator.SetBool("HasBerries", true);
                 regrowCount = 0;
                 hasBerries = true;
-                GetComponent<SpriteRenderer>().sprite = FullBushSprite;
             }
         }
     }
@@ -45,8 +44,8 @@ public class BerryBush : WorldObject
     {
         if (hasBerries)
         {
+            animator.SetBool("HasBerries", false);
             hasBerries = false;
-            GetComponent<SpriteRenderer>().sprite = EmptyBushSprite;
             regrowCount = 0;
         }
     }
@@ -59,11 +58,11 @@ public class BerryBush : WorldObject
 
         if (hasBerries)
         {
-            GetComponent<SpriteRenderer>().sprite = FullBushSprite;
+            animator.SetBool("HasBerries", true);
         }
         else
         {
-            GetComponent<SpriteRenderer>().sprite = EmptyBushSprite;
+            animator.SetBool("HasBerries", false);
         }
 
         return this;
