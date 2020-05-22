@@ -4,10 +4,12 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// Always update the resource member name when renaming classes
 public static class WorldResources
 {
     public static GameObject TreePrefab = Resources.Load<GameObject>("Prefabs/tree");
     public static GameObject BerryBush = Resources.Load<GameObject>("Prefabs/BerryBush");
+    public static GameObject PlayerController = Resources.Load<GameObject>("Prefabs/Player");
 
     public static Tile BlankTile = Resources.Load<Tile>("Tiles/Test/1bit_small_63");
     public static Tile GrassTile = Resources.Load<Tile>("Tiles/Test/1bit_small_6");

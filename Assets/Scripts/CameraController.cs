@@ -18,6 +18,11 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (ToFollow == null)
+        {
+            return;
+        }
+
         Vector3 toFollowPosition = ToFollow.transform.position;
         toFollowPosition.z = transform.position.z;
 

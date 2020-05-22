@@ -18,14 +18,33 @@ public class WorldGenerator : MonoBehaviour
     double bushProbability = .005;
     double obstacleSizeMean = 10;
     double obstacleSizeStd = 5;
+    bool[,] blocked;
     GameInfo gameInfo;
 
     void Start()
     {
+        blocked = new bool[width, height];
         gameInfo = GameInfo.Instance;
         gameInfo.GroundMap = new int[width, height];
         gameInfo.ObjectMap = new WorldObject[width, height];
+
         GenerateWorld();
+
+        bool placed = false;
+        while (!placed)
+        {
+            int locx = (int)(UnityEngine.Random.value * width);
+            int locy = (int)(UnityEngine.Random.value * height);
+            if (!blocked[locx, locy])
+            {
+                Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(locx, locy, 0));
+                PlayerController player = Instantiate(WorldResources.PlayerController, location, Quaternion.identity).GetComponent<PlayerController>();
+                gameInfo.ObjectMap[locx, locy] = player;
+                CameraController camera = GameObject.Find("MainCamera").GetComponent<CameraController>();
+                camera.ToFollow = player.gameObject;
+                placed = true;
+            }
+        }
     }
 
     public void LoadWorld(string fileName)
@@ -35,8 +54,6 @@ public class WorldGenerator : MonoBehaviour
 
     void GenerateWorld()
     {
-        bool[,] blocked = new bool[width, height];
-
         for (int i = -10; i < gameInfo.GroundMap.GetUpperBound(0) + 10; i++)
         {
             for (int j = -10; j < gameInfo.GroundMap.GetUpperBound(1) + 10; j++)
@@ -205,10 +222,5 @@ public class WorldGenerator : MonoBehaviour
     public GameObject GetGameObjectAt(int i, int j)
     {
         return ((MonoBehaviour)gameInfo.ObjectMap[i, j]).gameObject;
-    }
-
-    public Vector3 GetCellLocation(int i, int j)
-    {
-        return tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
     }
 }

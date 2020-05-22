@@ -71,6 +71,12 @@ public class GameInfo : MonoBehaviour
         }
     }
 
+    public Vector3 GetCellLocation(int i, int j)
+    {
+        Grid grid = GameObject.Find("Grid").GetComponent<Grid>();
+        return grid.GetCellCenterWorld(new Vector3Int(i, j, 0));
+    }
+
     public void LoadGameFromFile(string fileName)
     {
         string filePath = Path.Combine(Application.persistentDataPath, fileName);
@@ -135,6 +141,12 @@ public class GameInfo : MonoBehaviour
             WorldObject worldObject = Instantiate(prefab, location, Quaternion.identity).GetComponent<WorldObject>();
             worldObject.ObjectFromString(obj.info);
             objectMap[obj.locx, obj.locy] = worldObject;
+
+            if (obj.type == "PlayerController")
+            {
+                CameraController camera = GameObject.Find("MainCamera").GetComponent<CameraController>();
+                camera.ToFollow = worldObject.gameObject;
+            }
         }
 
         groundMap = Utils.Reshape2dArray<int>(info.groundArray, info.width, info.height);
