@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using UnityEngine;
 
-public class BerryBush : MonoBehaviour, IWorldObject
+public class BerryBush : WorldObject
 {
     [Serializable]
     private struct BerryBushInfo
@@ -18,10 +18,10 @@ public class BerryBush : MonoBehaviour, IWorldObject
     public Sprite EmptyBushSprite;
     public Sprite FullBushSprite;
 
-    bool HasBerries = true;
-    float RegrowCount = 0;
-    float RegrowSpeed = 1;
-    float RegrowMax = 50;
+    bool hasBerries = true;
+    float regrowCount = 0;
+    float regrowSpeed = 1;
+    float regrowMax = 50;
 
     void Start()
     {
@@ -29,13 +29,13 @@ public class BerryBush : MonoBehaviour, IWorldObject
 
     void Update()
     {
-        if (!HasBerries)
+        if (!hasBerries)
         {
-            RegrowCount += RegrowSpeed * Time.deltaTime;
-            if (RegrowCount > RegrowMax)
+            regrowCount += regrowSpeed * Time.deltaTime;
+            if (regrowCount > regrowMax)
             {
-                RegrowCount = 0;
-                HasBerries = true;
+                regrowCount = 0;
+                hasBerries = true;
                 GetComponent<SpriteRenderer>().sprite = FullBushSprite;
             }
         }
@@ -43,31 +43,21 @@ public class BerryBush : MonoBehaviour, IWorldObject
 
     public void RemoveBerries()
     {
-        if (HasBerries)
+        if (hasBerries)
         {
-            HasBerries = false;
+            hasBerries = false;
             GetComponent<SpriteRenderer>().sprite = EmptyBushSprite;
-            RegrowCount = 0;
+            regrowCount = 0;
         }
     }
 
-    public int GetLocationX()
-    {
-        return (int)transform.position.x;
-    }
-
-    public int GetLocationY()
-    {
-        return (int)transform.position.y;
-    }
-
-    public IWorldObject ObjectFromString(string json)
+    public override WorldObject ObjectFromString(string json)
     {
         BerryBushInfo bushInfo = JsonUtility.FromJson<BerryBushInfo>(json);
-        HasBerries = bushInfo.hasBerries;
-        RegrowCount = bushInfo.regrowCount;
+        hasBerries = bushInfo.hasBerries;
+        regrowCount = bushInfo.regrowCount;
 
-        if (HasBerries)
+        if (hasBerries)
         {
             GetComponent<SpriteRenderer>().sprite = FullBushSprite;
         }
@@ -79,19 +69,14 @@ public class BerryBush : MonoBehaviour, IWorldObject
         return this;
     }
 
-    public string ObjectToString()
+    public override string ObjectToString()
     {
         BerryBushInfo bushInfo;
         bushInfo.locx = GetLocationX();
         bushInfo.locy = GetLocationY();
-        bushInfo.hasBerries = HasBerries;
-        bushInfo.regrowCount = RegrowCount;
+        bushInfo.hasBerries = hasBerries;
+        bushInfo.regrowCount = regrowCount;
 
         return JsonUtility.ToJson(bushInfo);
-    }
-
-    public GameObject GetGameObject()
-    {
-        return gameObject;
     }
 }

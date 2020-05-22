@@ -24,7 +24,7 @@ public class WorldGenerator : MonoBehaviour
     {
         gameInfo = GameInfo.Instance;
         gameInfo.GroundMap = new int[width, height];
-        gameInfo.ObjectMap = new IWorldObject[width, height];
+        gameInfo.ObjectMap = new WorldObject[width, height];
         GenerateWorld();
     }
 
@@ -35,28 +35,6 @@ public class WorldGenerator : MonoBehaviour
 
     void GenerateWorld()
     {
-        GameObject treePrefab = Resources.Load<GameObject>("Prefabs/tree");
-        GameObject bushPrefab = Resources.Load<GameObject>("Prefabs/BerryBush");
-
-        Tile blank = Resources.Load<Tile>("Tiles/Test/1bit_small_63");
-        Tile grass = Resources.Load<Tile>("Tiles/Test/1bit_small_6");
-
-        Tile water_left = Resources.Load<Tile>("Tiles/Test/1bit_small_18");
-        Tile water_top = Resources.Load<Tile>("Tiles/Test/1bit_small_25");
-        Tile water_right = Resources.Load<Tile>("Tiles/Test/1bit_small_16");
-        Tile water_bottom = Resources.Load<Tile>("Tiles/Test/1bit_small_9");
-        Tile water_top_right = Resources.Load<Tile>("Tiles/Test/1bit_small_24");
-        Tile water_top_left = Resources.Load<Tile>("Tiles/Test/1bit_small_26");
-        Tile water_bottom_right = Resources.Load<Tile>("Tiles/Test/1bit_small_8");
-        Tile water_bottom_left = Resources.Load<Tile>("Tiles/Test/1bit_small_10");
-        Tile water = Resources.Load<Tile>("Tiles/Test/1bit_small_17");
-
-        Tile rock_top_right = Resources.Load<Tile>("Tiles/Test/1bit_small_31");
-        Tile rock_top_left = Resources.Load<Tile>("Tiles/Test/1bit_small_30");
-        Tile rock_bottom_right = Resources.Load<Tile>("Tiles/Test/1bit_small_39");
-        Tile rock_bottom_left = Resources.Load<Tile>("Tiles/Test/1bit_small_38");
-        Tile rock = Resources.Load<Tile>("Tiles/Test/1bit_small_29");
-
         bool[,] blocked = new bool[width, height];
 
         for (int i = -10; i < gameInfo.GroundMap.GetUpperBound(0) + 10; i++)
@@ -68,23 +46,23 @@ public class WorldGenerator : MonoBehaviour
                 {
                     if (i == -1 && j > -1 && j < gameInfo.GroundMap.GetUpperBound(1))
                     {
-                        tilemap.SetTile(new Vector3Int(i, j, 0), water_left);
+                        tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterLeftTile);
                     }
                     else if (i == gameInfo.GroundMap.GetUpperBound(0) && j > -1 && j < gameInfo.GroundMap.GetUpperBound(1))
                     {
-                        tilemap.SetTile(new Vector3Int(i, j, 0), water_right);
+                        tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterRightTile);
                     }
                     else if (j == -1 && i > -1 && i < gameInfo.GroundMap.GetUpperBound(1))
                     {
-                        tilemap.SetTile(new Vector3Int(i, j, 0), water_bottom);
+                        tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterBottomTile);
                     }
                     else if (j == gameInfo.GroundMap.GetUpperBound(1) && i > -1 && i < gameInfo.GroundMap.GetUpperBound(1))
                     {
-                        tilemap.SetTile(new Vector3Int(i, j, 0), water_top);
+                        tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterTopTile);
                     }
                     else
                     {
-                        tilemap.SetTile(new Vector3Int(i, j, 0), water);
+                        tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterTile);
                     }
                     continue;
                 }
@@ -103,17 +81,25 @@ public class WorldGenerator : MonoBehaviour
                 }
                 if (tileIndex == 0)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), blank);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.BlankTile);
                 }
                 else
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), grass);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GrassTile);
                 }
 
                 // Add water
                 if (UnityEngine.Random.value < waterProbability)
                 {
-                    Tile[] tiles = new Tile[] { water_bottom_right, water_bottom, water_bottom_left, water_right, water, water_left, water_top_right, water_top, water_top_left };
+                    Tile[] tiles = new Tile[] { WorldResources.WaterBottomRightTile,
+                                                WorldResources.WaterBottomTile, 
+                                                WorldResources.WaterBottomLeftTile, 
+                                                WorldResources.WaterRightTile,
+                                                WorldResources.WaterTile, 
+                                                WorldResources.WaterLeftTile,
+                                                WorldResources.WaterTopRightTile,
+                                                WorldResources.WaterTopTile,
+                                                WorldResources.WaterTopLeftTile };
                     GenerateObstacle(tiles, blocked, i, j);
                     continue;
                 }
@@ -121,7 +107,15 @@ public class WorldGenerator : MonoBehaviour
                 // Add rock
                 if (UnityEngine.Random.value < rockProbability)
                 {
-                    Tile[] tiles = new Tile[] { rock_bottom_right, rock, rock_bottom_left, rock, rock, rock, rock_top_right, rock, rock_top_left };
+                    Tile[] tiles = new Tile[] { WorldResources.RockBottomRightTile,
+                                                WorldResources.RockTile,
+                                                WorldResources.RockBottomLeftTile,
+                                                WorldResources.RockTile,
+                                                WorldResources.RockTile,
+                                                WorldResources.RockTile,
+                                                WorldResources.RockTopRightTile,
+                                                WorldResources.RockTile,
+                                                WorldResources.RockTopLeftTile };
                     GenerateObstacle(tiles, blocked, i, j);
                     continue;
                 }
@@ -138,7 +132,7 @@ public class WorldGenerator : MonoBehaviour
                 else if (UnityEngine.Random.value < bushProbability)
                 {
                     Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
-                    BerryBush bushObject = Instantiate(bushPrefab, location, Quaternion.identity).GetComponent<BerryBush>();
+                    BerryBush bushObject = Instantiate(WorldResources.BerryBush, location, Quaternion.identity).GetComponent<BerryBush>();
                     blocked[i, j] = true;
                     if (UnityEngine.Random.value < 0.5)
                     {

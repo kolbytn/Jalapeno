@@ -43,8 +43,8 @@ public class GameInfo : MonoBehaviour
         }
     }
 
-    private IWorldObject[,] objectMap;
-    public IWorldObject[,] ObjectMap
+    private WorldObject[,] objectMap;
+    public WorldObject[,] ObjectMap
     {
         get
         {
@@ -91,7 +91,7 @@ public class GameInfo : MonoBehaviour
     {
         GameInfoSerializable info;
 
-        IWorldObject[] objects = Utils.Flatten2dArray<IWorldObject>(objectMap);
+        WorldObject[] objects = Utils.Flatten2dArray<WorldObject>(objectMap);
         List<GameInfoSerializable.ObjectInfo> objectList = new List<GameInfoSerializable.ObjectInfo>();
         for (int i = 0; i < objects.Length; i++) 
         {
@@ -116,27 +116,23 @@ public class GameInfo : MonoBehaviour
 
     void InfoFromJson(string json)
     {
-        foreach (IWorldObject obj in Utils.Flatten2dArray<IWorldObject>(objectMap))
+        foreach (WorldObject obj in Utils.Flatten2dArray<WorldObject>(objectMap))
         {
             if (obj != null)
             {
-                Destroy(obj.GetGameObject());
+                Destroy(obj.gameObject);
             }
         }
-        objectMap = new IWorldObject[width, height];
+        objectMap = new WorldObject[width, height];
 
         GameInfoSerializable info = JsonUtility.FromJson<GameInfoSerializable>(json);
 
-        objectMap = new IWorldObject[info.width, info.height];
+        objectMap = new WorldObject[info.width, info.height];
         foreach (GameInfoSerializable.ObjectInfo obj in info.objectArray) 
         {
             Vector3 location = new Vector3Int(obj.locx, obj.locy, 0);
             GameObject prefab = WorldResources.GetGameObject(obj.type);
-            GameObject gameObject = Instantiate(prefab, location, Quaternion.identity);
-            Type objectType = Type.GetType(obj.type);
-            MethodInfo method = typeof(GameObject).GetMethod(nameof(GameObject.GetComponent), Type.EmptyTypes);
-            MethodInfo generic = method.MakeGenericMethod(objectType);
-            IWorldObject worldObject = (IWorldObject)generic.Invoke(gameObject, null);
+            WorldObject worldObject = Instantiate(prefab, location, Quaternion.identity).GetComponent<WorldObject>();
             worldObject.ObjectFromString(obj.info);
             objectMap[obj.locx, obj.locy] = worldObject;
         }
