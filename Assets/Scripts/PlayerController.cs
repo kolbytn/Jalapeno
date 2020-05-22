@@ -1,15 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : WorldObject
 {
+    [Serializable]
+    private struct PlayerInfo
+    {
+        public int locx;
+        public int locy;
+        public float health;
+        public float hunger;
+    }
+
     public float speed = 5;
 
     public float max_health = 100;
     public float max_hunger = 100;
-
-    public WorldGenerator worldGenerator;
 
     public UiBar health_bar;
     public UiBar hunger_bar;
@@ -32,8 +40,8 @@ public class PlayerController : MonoBehaviour
         health = max_health;
         hunger = max_hunger;
 
-        //health_bar.initializeValues(max_health, health);
-        //hunger_bar.initializeValues(max_hunger, hunger);
+        health_bar = GameObject.Find("Hungerbar").GetComponent<UiBar>();
+        hunger_bar = GameObject.Find("Healthbar").GetComponent<UiBar>();
     }
 
     // Update is called once per frame
@@ -84,7 +92,7 @@ public class PlayerController : MonoBehaviour
         {
             for (int j = -1; j <= 1; j++)
             {
-                Vector3 cell_loc = worldGenerator.GetCellLocation(row+i, column+j);
+                Vector3 cell_loc = GameInfo.Instance.GetCellLocation(row+i, column+j);
                 float dist = Vector3.Distance(cell_loc, transform.position);
                 if (dist < closest_dist)
                 {
@@ -98,5 +106,25 @@ public class PlayerController : MonoBehaviour
         column = new_col;
 
         //Debug.Log(new_row + ", " + new_col);
+    }
+
+    public override WorldObject ObjectFromString(string json)
+    {
+        PlayerInfo info = JsonUtility.FromJson<PlayerInfo>(json);
+        health = info.health;
+        hunger = info.hunger;
+
+        return this;
+    }
+
+    public override string ObjectToString()
+    {
+        PlayerInfo info;
+        info.locx = GetLocationX();
+        info.locy = GetLocationY();
+        info.health = health;
+        info.hunger = hunger;
+
+        return JsonUtility.ToJson(info);
     }
 }
