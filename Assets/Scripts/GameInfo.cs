@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using UnityEngine;
 using System.Reflection;
+using UnityEngine.Tilemaps;
 
 public class GameInfo : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class GameInfo : MonoBehaviour
         public int width;
         public int height;
         public ObjectInfo[] objectArray;
-        public int[] groundArray;
+        public string[] groundArray;
 
         [Serializable]
         public struct ObjectInfo
@@ -28,8 +29,8 @@ public class GameInfo : MonoBehaviour
     private int width;
     private int height;
 
-    private int[,] groundMap;
-    public int[,] GroundMap
+    private string[,] groundMap;
+    public string[,] GroundMap
     {
         get
         {
@@ -37,8 +38,8 @@ public class GameInfo : MonoBehaviour
         }
         set
         {
-            width = value.GetUpperBound(0);
-            height = value.GetUpperBound(1);
+            width = value.GetUpperBound(0) + 1;
+            height = value.GetUpperBound(1) + 1;
             groundMap = value;
         }
     }
@@ -113,7 +114,7 @@ public class GameInfo : MonoBehaviour
         }
 
         info.objectArray = objectList.ToArray();
-        info.groundArray = Utils.Flatten2dArray<int>(groundMap);
+        info.groundArray = Utils.Flatten2dArray<string>(groundMap);
         info.width = width;
         info.height = height;
 
@@ -149,8 +150,17 @@ public class GameInfo : MonoBehaviour
             }
         }
 
-        groundMap = Utils.Reshape2dArray<int>(info.groundArray, info.width, info.height);
+        groundMap = Utils.Reshape2dArray<string>(info.groundArray, info.width, info.height);
         width = info.width;
         height = info.height;
+
+        Tilemap tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
+        for (int i = 0; i <= groundMap.GetUpperBound(0); i++)
+        {
+            for (int j = 0; j <= groundMap.GetUpperBound(1); j++)
+            {
+                tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(groundMap[i, j]));
+            }
+        }
     }
 }

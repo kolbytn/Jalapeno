@@ -25,7 +25,7 @@ public class WorldGenerator : MonoBehaviour
     {
         blocked = new bool[width, height];
         gameInfo = GameInfo.Instance;
-        gameInfo.GroundMap = new int[width, height];
+        gameInfo.GroundMap = new string[width, height];
         gameInfo.ObjectMap = new WorldObject[width, height];
 
         GenerateWorld();
@@ -47,33 +47,28 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    public void LoadWorld(string fileName)
-    {
-
-    }
-
     void GenerateWorld()
     {
-        for (int i = -10; i < gameInfo.GroundMap.GetUpperBound(0) + 10; i++)
+        for (int i = -10; i <= gameInfo.GroundMap.GetUpperBound(0) + 10; i++)
         {
-            for (int j = -10; j < gameInfo.GroundMap.GetUpperBound(1) + 10; j++)
+            for (int j = -10; j <= gameInfo.GroundMap.GetUpperBound(1) + 10; j++)
             {
                 // Set bounds
-                if (i < 0 || i >= gameInfo.GroundMap.GetUpperBound(0) || j < 0 || j >= gameInfo.GroundMap.GetUpperBound(1))
+                if (i < 0 || i > gameInfo.GroundMap.GetUpperBound(0) || j < 0 || j > gameInfo.GroundMap.GetUpperBound(1))
                 {
                     if (i == -1 && j > -1 && j < gameInfo.GroundMap.GetUpperBound(1))
                     {
                         tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterLeftTile);
                     }
-                    else if (i == gameInfo.GroundMap.GetUpperBound(0) && j > -1 && j < gameInfo.GroundMap.GetUpperBound(1))
+                    else if (i == gameInfo.GroundMap.GetUpperBound(0) + 1 && j > -1 && j <= gameInfo.GroundMap.GetUpperBound(1))
                     {
                         tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterRightTile);
                     }
-                    else if (j == -1 && i > -1 && i < gameInfo.GroundMap.GetUpperBound(1))
+                    else if (j == -1 && i > -1 && i <= gameInfo.GroundMap.GetUpperBound(1))
                     {
                         tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterBottomTile);
                     }
-                    else if (j == gameInfo.GroundMap.GetUpperBound(1) && i > -1 && i < gameInfo.GroundMap.GetUpperBound(1))
+                    else if (j == gameInfo.GroundMap.GetUpperBound(1) + 1 && i > -1 && i <= gameInfo.GroundMap.GetUpperBound(1))
                     {
                         tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterTopTile);
                     }
@@ -99,24 +94,26 @@ public class WorldGenerator : MonoBehaviour
                 if (tileIndex == 0)
                 {
                     tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.BlankTile);
+                    gameInfo.GroundMap[i, j] = "BlankTile";
                 }
                 else
                 {
                     tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GrassTile);
+                    gameInfo.GroundMap[i, j] = "GrassTile";
                 }
 
                 // Add water
                 if (UnityEngine.Random.value < waterProbability)
                 {
-                    Tile[] tiles = new Tile[] { WorldResources.WaterBottomRightTile,
-                                                WorldResources.WaterBottomTile, 
-                                                WorldResources.WaterBottomLeftTile, 
-                                                WorldResources.WaterRightTile,
-                                                WorldResources.WaterTile, 
-                                                WorldResources.WaterLeftTile,
-                                                WorldResources.WaterTopRightTile,
-                                                WorldResources.WaterTopTile,
-                                                WorldResources.WaterTopLeftTile };
+                    string[] tiles = new string[] { "WaterBottomRightTile",
+                                                    "WaterBottomTile", 
+                                                    "WaterBottomLeftTile", 
+                                                    "WaterRightTile",
+                                                    "WaterTile", 
+                                                    "WaterLeftTile",
+                                                    "WaterTopRightTile",
+                                                    "WaterTopTile",
+                                                    "WaterTopLeftTile" };
                     GenerateObstacle(tiles, blocked, i, j);
                     continue;
                 }
@@ -124,15 +121,15 @@ public class WorldGenerator : MonoBehaviour
                 // Add rock
                 if (UnityEngine.Random.value < rockProbability)
                 {
-                    Tile[] tiles = new Tile[] { WorldResources.RockBottomRightTile,
-                                                WorldResources.RockTile,
-                                                WorldResources.RockBottomLeftTile,
-                                                WorldResources.RockTile,
-                                                WorldResources.RockTile,
-                                                WorldResources.RockTile,
-                                                WorldResources.RockTopRightTile,
-                                                WorldResources.RockTile,
-                                                WorldResources.RockTopLeftTile };
+                    string[] tiles = new string[] { "RockBottomRightTile",
+                                                    "RockTile",
+                                                    "RockBottomLeftTile",
+                                                    "RockTile",
+                                                    "RockTile",
+                                                    "RockTile",
+                                                    "RockTopRightTile",
+                                                    "RockTile",
+                                                    "RockTopLeftTile" };
                     GenerateObstacle(tiles, blocked, i, j);
                     continue;
                 }
@@ -166,7 +163,7 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    void GenerateObstacle(Tile[] tiles, bool[,] blocked, int locationX, int locationY)
+    void GenerateObstacle(string[] tiles, bool[,] blocked, int locationX, int locationY)
     {
         int sizeX = (int)Math.Floor(Utils.SampleNormal(obstacleSizeMean, obstacleSizeStd));
         int sizeY = (int)Math.Floor(Utils.SampleNormal(obstacleSizeMean, obstacleSizeStd));
@@ -180,39 +177,48 @@ public class WorldGenerator : MonoBehaviour
             {
                 if (i == locationX && j == locationY)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[6]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[6]));
+                    gameInfo.GroundMap[i, j] = tiles[6];
                 }
                 else if (i == locationX + sizeX - 1 && j == locationY)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[8]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[8]));
+                    gameInfo.GroundMap[i, j] = tiles[8];
                 }
                 else if (i == locationX && j == locationY + sizeY - 1)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[0]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[0]));
+                    gameInfo.GroundMap[i, j] = tiles[0];
                 }
                 else if (i == locationX + sizeX - 1 && j == locationY + sizeY - 1)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[2]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[2]));
+                    gameInfo.GroundMap[i, j] = tiles[2];
                 }
                 else if (i == locationX)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[3]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[3]));
+                    gameInfo.GroundMap[i, j] = tiles[3];
                 }
                 else if (j == locationY)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[7]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[7]));
+                    gameInfo.GroundMap[i, j] = tiles[7];
                 }
                 else if (i == locationX + sizeX - 1)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[5]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[5]));
+                    gameInfo.GroundMap[i, j] = tiles[5];
                 }
                 else if (j == locationY + sizeY - 1)
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[1]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[1]));
+                    gameInfo.GroundMap[i, j] = tiles[1];
                 }
                 else
                 {
-                    tilemap.SetTile(new Vector3Int(i, j, 0), tiles[4]);
+                    tilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[4]));
+                    gameInfo.GroundMap[i, j] = tiles[4];
                 }
                 blocked[i, j] = true;
             }
