@@ -14,6 +14,8 @@ public class PlayerController : WorldObject
         public float hunger;
     }
 
+    public Animator animator;
+
     public float speed = 5;
 
     public float max_health = 100;
@@ -57,7 +59,9 @@ public class PlayerController : WorldObject
 
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
-        
+
+        animator.SetFloat("Speed", Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+
         Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
         float x1 = mousePosition.x;
