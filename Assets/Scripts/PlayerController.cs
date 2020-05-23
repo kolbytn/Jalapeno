@@ -104,7 +104,7 @@ public class PlayerController : WorldObject
             for (int j = -1; j <= 1; j++)
             {
                 //check for updates to the player's grid location
-                Vector3 cell_loc = GameInfo.Instance.GetCellLocation(row+i, col + j);
+                Vector3 cell_loc = WorldController.Instance.GetCellLocation(row+i, col + j);
                 float dist = Vector3.Distance(cell_loc, transform.position);
                 if (dist < closest_dist)
                 {
