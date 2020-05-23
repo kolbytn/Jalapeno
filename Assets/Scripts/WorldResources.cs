@@ -8,6 +8,8 @@ public static class WorldResources
     public static GameObject WoodTree = Resources.Load<GameObject>("Prefabs/tree");
     public static GameObject BerryBush = Resources.Load<GameObject>("Prefabs/BerryBush");
     public static GameObject PlayerController = Resources.Load<GameObject>("Prefabs/Player");
+    public static GameObject HighlightPrefab = Resources.Load<GameObject>("Prefabs/HighlightPrefab");
+
 
     public static Tile BlankTile = Resources.Load<Tile>("Tiles/Test/1bit_small_63");
     public static Tile GrassTile = Resources.Load<Tile>("Tiles/Test/1bit_small_6");
@@ -27,6 +29,7 @@ public static class WorldResources
     public static Tile RockBottomRightTile = Resources.Load<Tile>("Tiles/Test/1bit_small_39");
     public static Tile RockBottomLeftTile = Resources.Load<Tile>("Tiles/Test/1bit_small_38");
     public static Tile RockTile = Resources.Load<Tile>("Tiles/Test/1bit_small_29");
+
 
     public static GameObject GetGameObject(string name)
     {
