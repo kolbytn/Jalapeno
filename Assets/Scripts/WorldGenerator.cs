@@ -42,6 +42,7 @@ public class WorldGenerator : MonoBehaviour
                 gameInfo.ObjectMap[locx, locy] = player;
                 CameraController camera = GameObject.Find("MainCamera").GetComponent<CameraController>();
                 camera.ToFollow = player.gameObject;
+                player.SetGridLocation(locx, locy);
                 placed = true;
             }
         }

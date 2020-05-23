@@ -10,6 +10,8 @@ public abstract class WorldObject : MonoBehaviour
 
     public int GetLocationX()
     {
+        //  why int? I think this causes a glitch that truncates everything's position upon reloading
+        // for instance bushes are not at the center of their grid location after reloading
         return (int)transform.position.x;
     }
 

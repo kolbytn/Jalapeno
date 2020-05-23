@@ -74,6 +74,8 @@ public class GameInfo : MonoBehaviour
 
     public Vector3 GetCellLocation(int i, int j)
     {
+        // finding the grid every time we call this has got to be very inefficient
+        // this is called 9 times every tick
         Grid grid = GameObject.Find("Grid").GetComponent<Grid>();
         return grid.GetCellCenterWorld(new Vector3Int(i, j, 0));
     }
