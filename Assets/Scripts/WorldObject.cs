@@ -6,17 +6,15 @@ public abstract class WorldObject : MonoBehaviour
 {
     public abstract string ObjectToString();
 
-    public abstract WorldObject ObjectFromString(string json);
+    public abstract WorldObject ObjectFromString(string info);
 
-    public int GetLocationX()
+    public float GetLocationX()
     {
-        //  why int? I think this causes a glitch that truncates everything's position upon reloading
-        // for instance bushes are not at the center of their grid location after reloading
-        return (int)transform.position.x;
+        return transform.position.x;
     }
 
-    public int GetLocationY()
+    public float GetLocationY()
     {
-        return (int)transform.position.y;
+        return transform.position.y;
     }
 }

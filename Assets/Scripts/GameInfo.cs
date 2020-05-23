@@ -20,8 +20,8 @@ public class GameInfo : MonoBehaviour
         public struct ObjectInfo
         {
             public string type;
-            public int locx;
-            public int locy;
+            public float locx;
+            public float locy;
             public string info;
         }
     }
@@ -139,11 +139,11 @@ public class GameInfo : MonoBehaviour
         objectMap = new WorldObject[info.width, info.height];
         foreach (GameInfoSerializable.ObjectInfo obj in info.objectArray) 
         {
-            Vector3 location = new Vector3Int(obj.locx, obj.locy, 0);
+            Vector3 location = new Vector3(obj.locx, obj.locy, 0);
             GameObject prefab = WorldResources.GetGameObject(obj.type);
             WorldObject worldObject = Instantiate(prefab, location, Quaternion.identity).GetComponent<WorldObject>();
             worldObject.ObjectFromString(obj.info);
-            objectMap[obj.locx, obj.locy] = worldObject;
+            objectMap[(int)obj.locx, (int)obj.locy] = worldObject;
 
             if (obj.type == "PlayerController")
             {

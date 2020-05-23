@@ -6,14 +6,6 @@ using UnityEngine;
 
 public class BerryBush : WorldObject
 {
-    [Serializable]
-    private struct BerryBushInfo
-    {
-        public int locx;
-        public int locy;
-        public bool hasBerries;
-        public float regrowCount;
-    }
     public Animator animator;
 
     bool hasBerries = true;
@@ -50,20 +42,20 @@ public class BerryBush : WorldObject
         }
     }
 
-    public override WorldObject ObjectFromString(string json)
+    [Serializable]
+    private struct BerryBushInfo
     {
-        BerryBushInfo bushInfo = JsonUtility.FromJson<BerryBushInfo>(json);
+        public bool hasBerries;
+        public float regrowCount;
+    }
+
+    public override WorldObject ObjectFromString(string info)
+    {
+        BerryBushInfo bushInfo = JsonUtility.FromJson<BerryBushInfo>(info);
         hasBerries = bushInfo.hasBerries;
         regrowCount = bushInfo.regrowCount;
 
-        if (hasBerries)
-        {
-            animator.SetBool("HasBerries", true);
-        }
-        else
-        {
-            animator.SetBool("HasBerries", false);
-        }
+        animator.SetBool("HasBerries", hasBerries);
 
         return this;
     }
@@ -71,8 +63,6 @@ public class BerryBush : WorldObject
     public override string ObjectToString()
     {
         BerryBushInfo bushInfo;
-        bushInfo.locx = GetLocationX();
-        bushInfo.locy = GetLocationY();
         bushInfo.hasBerries = hasBerries;
         bushInfo.regrowCount = regrowCount;
 

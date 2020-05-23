@@ -5,21 +5,6 @@ using UnityEngine;
 
 public class PlayerController : WorldObject
 {
-    [Serializable]
-    private struct PlayerInfo
-    {
-        public int locx;
-        public int locy;
-        public float health;
-        public float hunger;
-    }
-
-    private struct GridLocation
-    {
-        public int row;
-        public int col;
-    }
-
     public Animator animator;
 
     public float speed = 5;
@@ -161,11 +146,18 @@ public class PlayerController : WorldObject
 
     }
 
-    public override WorldObject ObjectFromString(string json)
+    [Serializable]
+    private struct PlayerInfo
     {
-        PlayerInfo info = JsonUtility.FromJson<PlayerInfo>(json);
-        health = info.health;
-        hunger = info.hunger;
+        public float health;
+        public float hunger;
+    }
+
+    public override WorldObject ObjectFromString(string info)
+    {
+        PlayerInfo playerInfo = JsonUtility.FromJson<PlayerInfo>(info);
+        health = playerInfo.health;
+        hunger = playerInfo.hunger;
 
         return this;
     }
@@ -173,8 +165,6 @@ public class PlayerController : WorldObject
     public override string ObjectToString()
     {
         PlayerInfo info;
-        info.locx = GetLocationX();
-        info.locy = GetLocationY();
         info.health = health;
         info.hunger = hunger;
 

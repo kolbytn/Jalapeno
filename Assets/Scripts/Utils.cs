@@ -46,3 +46,9 @@ public class Utils : MonoBehaviour
         return reshaped;
     }
 }
+
+public struct GridLocation
+{
+    public int row;
+    public int col;
+}
