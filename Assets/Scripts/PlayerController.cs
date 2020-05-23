@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : WorldObject
@@ -16,7 +14,7 @@ public class PlayerController : WorldObject
     public UiBar hunger_bar;
     float health;
     float hunger;
-    float hunger_speed = 0.1f;
+    readonly float hunger_speed = 0.1f;
 
     Rigidbody2D rigidbody2d;
     float horizontal = 0;
@@ -53,7 +51,7 @@ public class PlayerController : WorldObject
         if (hunger > 0)
         {
             hunger -= hunger_speed * Time.deltaTime;
-            hunger_bar.updateValue(hunger);
+            hunger_bar.UpdateValue(hunger);
         }
 
         horizontal = Input.GetAxis("Horizontal");
@@ -69,7 +67,7 @@ public class PlayerController : WorldObject
         float y2 = rigidbody2d.position.y;
         float xDiff = x1 - x2;
         float yDiff = y1 - y2;
-        look_angle = (float)(Mathf.Atan2(yDiff, xDiff) * Mathf.Rad2Deg) + 90;
+        look_angle = (Mathf.Atan2(yDiff, xDiff) * Mathf.Rad2Deg) + 90;
         if (look_angle < 0)
         {
             look_angle += 360;

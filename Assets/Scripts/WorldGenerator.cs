@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Versioning;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class WorldGenerator : MonoBehaviour
 {
     public Tilemap tilemap;
-    
-    int width = 100;
-    int height = 100;
-    int tileCount = 2;
-    double waterProbability = .001;
-    double rockProbability = .001;
-    //double treeProbability = .005;
-    double bushProbability = .005;
-    double obstacleSizeMean = 10;
-    double obstacleSizeStd = 5;
+    readonly int width = 100;
+    readonly int height = 100;
+    readonly int tileCount = 2;
+    readonly double waterProbability = .001;
+    readonly double rockProbability = .001;
+    //readonly double treeProbability = .005;
+    readonly double bushProbability = .005;
+    readonly double obstacleSizeMean = 10;
+    readonly double obstacleSizeStd = 5;
     bool[,] blocked;
     WorldController worldController;
 
@@ -40,8 +36,7 @@ public class WorldGenerator : MonoBehaviour
                 Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(locx, locy, 0));
                 PlayerController player = Instantiate(WorldResources.PlayerController, location, Quaternion.identity).GetComponent<PlayerController>();
                 worldController.ObjectMap[locx, locy] = player;
-                CameraController camera = GameObject.Find("MainCamera").GetComponent<CameraController>();
-                camera.ToFollow = player.gameObject;
+                worldController.WorldCamera.ToFollow = player.gameObject;
                 player.SetGridLocation(locx, locy);
                 placed = true;
             }

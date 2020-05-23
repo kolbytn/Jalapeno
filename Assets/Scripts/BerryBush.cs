@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using UnityEngine;
 
 public class BerryBush : WorldObject
@@ -10,8 +7,8 @@ public class BerryBush : WorldObject
 
     bool hasBerries = true;
     float regrowCount = 0;
-    float regrowSpeed = 1;
-    float regrowMax = 50;
+    readonly float regrowSpeed = 1;
+    readonly float regrowMax = 50;
 
     void Start()
     {

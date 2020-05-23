@@ -1,19 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
     public GameObject ToFollow;
     public float CameraMoveSpeed = 5f;
-
-    Vector3 newCameraPosition;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -31,7 +21,7 @@ public class CameraController : MonoBehaviour
 
         if (distance > 0)
         {
-            Vector3 newCameraPosition = transform.position + cameraMoveDir * distance * CameraMoveSpeed * Time.deltaTime;
+            Vector3 newCameraPosition = transform.position + cameraMoveDir * distance * CameraMoveSpeed * Time.fixedDeltaTime;
 
             float distanceAfterMoving = Vector3.Distance(newCameraPosition, toFollowPosition);
             if (distanceAfterMoving > distance)
