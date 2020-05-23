@@ -10,7 +10,7 @@ public class WorldGenerator : MonoBehaviour
     readonly int tileCount = 2;
     readonly double waterProbability = .001;
     readonly double rockProbability = .001;
-    //readonly double treeProbability = .005;
+    readonly double treeProbability = .005;
     readonly double bushProbability = .005;
     readonly double obstacleSizeMean = 10;
     readonly double obstacleSizeStd = 5;
@@ -21,7 +21,6 @@ public class WorldGenerator : MonoBehaviour
     {
         blocked = new bool[width, height];
         worldController = WorldController.Instance;
-        worldController.init();
         worldController.GroundMap = new string[width, height];
         worldController.ObjectMap = new WorldObject[width, height];
 
@@ -77,7 +76,7 @@ public class WorldGenerator : MonoBehaviour
                 }
 
                 // Skip if location is used
-                if (blocked[i,j])
+                if (blocked[i, j])
                 {
                     continue;
                 }
@@ -103,10 +102,10 @@ public class WorldGenerator : MonoBehaviour
                 if (UnityEngine.Random.value < waterProbability)
                 {
                     string[] tiles = new string[] { "WaterBottomRightTile",
-                                                    "WaterBottomTile", 
-                                                    "WaterBottomLeftTile", 
+                                                    "WaterBottomTile",
+                                                    "WaterBottomLeftTile",
                                                     "WaterRightTile",
-                                                    "WaterTile", 
+                                                    "WaterTile",
                                                     "WaterLeftTile",
                                                     "WaterTopRightTile",
                                                     "WaterTopTile",
@@ -132,32 +131,31 @@ public class WorldGenerator : MonoBehaviour
                 }
 
                 // Add tree objects
-                //if (UnityEngine.Random.value < treeProbability)
-                //{
-                //    Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
-                //    GameObject treeObject = Instantiate(treePrefab, location, Quaternion.identity);
-                //    blocked[i, j] = true;
-                //    worldController.ObjectMap[i, j] = treeObject;
-                //    continue;
-                //}
-                else if (UnityEngine.Random.value < bushProbability)
+                if (UnityEngine.Random.value < treeProbability)
                 {
-                    Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
-                    BerryBush bushObject = Instantiate(WorldResources.BerryBush, location, Quaternion.identity).GetComponent<BerryBush>();
-                    blocked[i, j] = true;
-                    if (UnityEngine.Random.value < 0.5)
-                    {
-                        bushObject.RemoveBerries();
-                    }
-                    worldController.ObjectMap[i, j] = bushObject;
+                    AddObject(WorldResources.WoodTree, i, j);
                     continue;
                 }
-                else
+                else if (UnityEngine.Random.value < bushProbability)
                 {
-                    worldController.ObjectMap[i, j] = null;
+                    WorldObject worldObject = AddObject(WorldResources.BerryBush, i, j);
+                    if (UnityEngine.Random.value < 0.5)
+                    {
+                        ((BerryBush)worldObject).RemoveBerries();
+                    }
+                    continue;
                 }
             }
         }
+    }
+
+    WorldObject AddObject(GameObject obj, int i, int j)
+    {
+        Vector3 location = tilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
+        WorldObject worldObject = Instantiate(obj, location, Quaternion.identity).GetComponent<WorldObject>();
+        blocked[i, j] = true;
+        worldController.ObjectMap[i, j] = worldObject;
+        return worldObject;
     }
 
     void GenerateObstacle(string[] tiles, bool[,] blocked, int locationX, int locationY)
@@ -220,10 +218,5 @@ public class WorldGenerator : MonoBehaviour
                 blocked[i, j] = true;
             }
         }
-    }
-
-    public GameObject GetGameObjectAt(int i, int j)
-    {
-        return ((MonoBehaviour)worldController.ObjectMap[i, j]).gameObject;
     }
 }

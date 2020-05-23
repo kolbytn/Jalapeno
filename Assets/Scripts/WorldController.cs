@@ -38,14 +38,11 @@ public class WorldController : MonoBehaviour
 
     void Start()
     {
-        
-    }
-
-    public void init(){
         saveManager = new GameObject().AddComponent<SaveManager>();
         WorldGrid = GameObject.Find("Grid").GetComponent<Grid>();
         WorldTilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         WorldCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
+        instance = this;
     }
 
     public Vector3 GetCellLocation(int col, int row)
