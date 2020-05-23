@@ -38,20 +38,29 @@ public class WorldController : MonoBehaviour
 
     void Start()
     {
+        
+    }
+
+    public void init(){
         saveManager = new GameObject().AddComponent<SaveManager>();
         WorldGrid = GameObject.Find("Grid").GetComponent<Grid>();
         WorldTilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         WorldCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
     }
 
-    public Vector3 GetCellLocation(int i, int j)
+    public Vector3 GetCellLocation(int col, int row)
     {
         // TODO WorldController should be initialized first to avoid this
         if (WorldGrid == null)
         {
             return new Vector3(0, 0, 0);
         }
-        return WorldGrid.GetCellCenterWorld(new Vector3Int(i, j, 0));
+        return WorldGrid.GetCellCenterWorld(new Vector3Int(col, row, 0));
+    }
+
+    public void ChangeTile(int col, int row, Tile newTile)
+    {
+        WorldTilemap.SetTile(new Vector3Int(col, row, 0), newTile);
     }
 
     public void LoadGameFromFile(string fileName)

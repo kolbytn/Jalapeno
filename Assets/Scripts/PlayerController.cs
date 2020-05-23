@@ -35,12 +35,12 @@ public class PlayerController : WorldObject
         hunger_bar = GameObject.Find("Healthbar").GetComponent<UiBar>();
     }
 
-    public void SetGridLocation(int row, int col)
+    public void SetGridLocation(int col, int row)
     {
-        PlayerGridLoc.row = row;
         PlayerGridLoc.col = col;
-        InteractGridLoc.row = row+1;
+        PlayerGridLoc.row = row;
         InteractGridLoc.col = col;
+        InteractGridLoc.row = row+1;
     }
 
     // Update is called once per frame
@@ -93,36 +93,35 @@ public class PlayerController : WorldObject
     {
         // loops through the surrounding grid locations and checks to see which one is closest and updates row and column
         float closest_dist = 1000;
-        int row = PlayerGridLoc.row;
         int col = PlayerGridLoc.col;
-        int new_row=0;
+        int row = PlayerGridLoc.row;
         int new_col=0;
+        int new_row=0;
         for (int i=-1; i <= 1; i++)
         {
             for (int j = -1; j <= 1; j++)
             {
                 //check for updates to the player's grid location
-                Vector3 cell_loc = WorldController.Instance.GetCellLocation(row+i, col + j);
+                Vector3 cell_loc = WorldController.Instance.GetCellLocation(col+j, row+i);
                 float dist = Vector3.Distance(cell_loc, transform.position);
                 if (dist < closest_dist)
                 {
                     closest_dist = dist;
-                    new_row = row + i;
-                    new_col = col + j;
+                    new_col = col+j;
+                    new_row = row+i;
                 }
             }
         }
-        PlayerGridLoc.row = new_row;
         PlayerGridLoc.col = new_col;
+        PlayerGridLoc.row = new_row;
 
-        int loc_row = 0;
         int loc_col = 0;
-
+        int loc_row = 0;
         if (look_angle >= 112.5 && look_angle < 247.5)
         {
             loc_row = 1;
         }
-        else if (look_angle >= 292.5 && look_angle < 67.5)
+        else if (look_angle >= 292.5 || look_angle < 67.5)
         {
             loc_row = -1;
         }
@@ -130,15 +129,17 @@ public class PlayerController : WorldObject
         {
             loc_col = 1;
         }
-        else if (look_angle >= 102.5 && look_angle < 338.5)
+        else if (look_angle >= 202.5 && look_angle < 338.5)
         {
             loc_col = -1;
         }
-
-        InteractGridLoc.row = PlayerGridLoc.row + loc_row;
         InteractGridLoc.col = PlayerGridLoc.col + loc_col;
+        InteractGridLoc.row = PlayerGridLoc.row + loc_row;
 
-        //Debug.Log(look_angle);
+        // WorldController.Instance.ChangeTile(InteractGridLoc.col, InteractGridLoc.row, WorldResources.GrassTile);
+        // WorldController.Instance.ChangeTile(PlayerGridLoc.row, PlayerGridLoc.col, WorldResources.BlankTile);
+
+        // Debug.Log(look_angle);
         //Debug.Log("Player Grid Location: " + new_row + ", " + new_col);
         //Debug.Log("Interactable Grid Location: " + InteractGridLoc.row + ", " + InteractGridLoc.col);
 

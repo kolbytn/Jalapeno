@@ -46,7 +46,7 @@ public class Utils : MonoBehaviour
 }
 
 public struct GridLocation
-{
-    public int row;
+{    
     public int col;
+    public int row;
 }

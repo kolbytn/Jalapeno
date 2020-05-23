@@ -21,6 +21,7 @@ public class WorldGenerator : MonoBehaviour
     {
         blocked = new bool[width, height];
         worldController = WorldController.Instance;
+        worldController.init();
         worldController.GroundMap = new string[width, height];
         worldController.ObjectMap = new WorldObject[width, height];
 
