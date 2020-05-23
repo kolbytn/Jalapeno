@@ -89,6 +89,7 @@ public class PlayerController : WorldObject
         //transform.rotation = Quaternion.Euler(0, 0, look_angle);
     }
 
+    private GameObject HightlightSprite = null;
     void CalcGridPosition()
     {
         // loops through the surrounding grid locations and checks to see which one is closest and updates row and column
@@ -133,8 +134,20 @@ public class PlayerController : WorldObject
         {
             loc_col = -1;
         }
+        new_col=PlayerGridLoc.col + loc_col;
+        new_row=PlayerGridLoc.row + loc_row;
+        bool changed = (new_col != InteractGridLoc.col || new_row != InteractGridLoc.row);
         InteractGridLoc.col = PlayerGridLoc.col + loc_col;
         InteractGridLoc.row = PlayerGridLoc.row + loc_row;
+        if (changed)
+        {
+            Destroy(HightlightSprite);
+            HightlightSprite = GameObject.Instantiate(WorldResources.HighlightPrefab,
+                WorldController.Instance.GetCellLocation(InteractGridLoc.col, InteractGridLoc.row),
+                Quaternion.identity);
+        }
+        
+        
 
         // WorldController.Instance.ChangeTile(InteractGridLoc.col, InteractGridLoc.row, WorldResources.GrassTile);
         // WorldController.Instance.ChangeTile(PlayerGridLoc.row, PlayerGridLoc.col, WorldResources.BlankTile);
