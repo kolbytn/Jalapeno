@@ -32,6 +32,7 @@ public class WorldController : MonoBehaviour
     }
 
     private SaveManager saveManager;
+    private WorldGenerator worldGenerator;
     public Grid WorldGrid { private set; get; }
     public Tilemap WorldTilemap { private set; get; }
     public CameraController WorldCamera { private set; get; }
@@ -39,10 +40,13 @@ public class WorldController : MonoBehaviour
     void Start()
     {
         saveManager = new GameObject().AddComponent<SaveManager>();
+        worldGenerator = new GameObject().AddComponent<WorldGenerator>();
         WorldGrid = GameObject.Find("Grid").GetComponent<Grid>();
         WorldTilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         WorldCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
         instance = this;
+
+        worldGenerator.GenerateWorld();
     }
 
     public Vector3 GetCellLocation(int col, int row)
