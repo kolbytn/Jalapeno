@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class BerryBush : WorldObject
+public class BerryBush : InteractableObject
 {
     public Animator animator;
 
@@ -27,6 +27,12 @@ public class BerryBush : WorldObject
                 hasBerries = true;
             }
         }
+    }
+
+    public override void  Interact(PlayerController user)
+    {
+        RemoveBerries();
+        user.Eat(20);
     }
 
     public void RemoveBerries()

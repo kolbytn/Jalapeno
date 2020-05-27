@@ -19,7 +19,7 @@ public class WorldGenerator : MonoBehaviour
     {
         blocked = new bool[width, height];
         WorldController.Instance.GroundMap = new string[width, height];
-        WorldController.Instance.ObjectMap = new WorldObject[width, height];
+        WorldController.Instance.ObjectMap = new InteractableObject[width, height];
 
         IterateWorld();
 
@@ -32,7 +32,7 @@ public class WorldGenerator : MonoBehaviour
             {
                 Vector3 location = WorldController.Instance.WorldTilemap.GetCellCenterWorld(new Vector3Int(locx, locy, 0));
                 PlayerController player = Instantiate(WorldResources.PlayerController, location, Quaternion.identity).GetComponent<PlayerController>();
-                WorldController.Instance.ObjectMap[locx, locy] = player;
+                // WorldController.Instance.ObjectMap[locx, locy] = player;
                 WorldController.Instance.WorldCamera.ToFollow = player.gameObject;
                 player.SetGridLocation(locx, locy);
                 placed = true;
@@ -149,10 +149,10 @@ public class WorldGenerator : MonoBehaviour
     WorldObject AddObject(GameObject obj, int i, int j)
     {
         Vector3 location = WorldController.Instance.WorldTilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
-        WorldObject worldObject = Instantiate(obj, location, Quaternion.identity).GetComponent<WorldObject>();
+        InteractableObject interactableObject = Instantiate(obj, location, Quaternion.identity).GetComponent<InteractableObject>();
         blocked[i, j] = true;
-        WorldController.Instance.ObjectMap[i, j] = worldObject;
-        return worldObject;
+        WorldController.Instance.ObjectMap[i, j] = interactableObject;
+        return interactableObject;
     }
 
     void GenerateObstacle(string[] tiles, bool[,] blocked, int locationX, int locationY)

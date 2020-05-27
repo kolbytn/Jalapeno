@@ -1,11 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
-public class WoodTree : WorldObject
+public class WoodTree : InteractableObject
 {
     [Serializable]
     private struct WoodTreeInfo
     {
+    }
+
+    public override void  Interact(PlayerController user)
+    {
+        Debug.Log("treeeee!!");
+        
     }
 
     public override WorldObject ObjectFromString(string info)

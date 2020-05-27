@@ -6,7 +6,7 @@ public class WorldController : MonoBehaviour
 {
     public string[,] GroundMap { get; set; }
 
-    public WorldObject[,] ObjectMap { get; set; }
+    public InteractableObject[,] ObjectMap { get; set; }
 
     public int Width
     {
@@ -51,12 +51,14 @@ public class WorldController : MonoBehaviour
 
     public Vector3 GetCellLocation(int col, int row)
     {
-        // TODO WorldController should be initialized first to avoid this
-        if (WorldGrid == null)
-        {
-            return new Vector3(0, 0, 0);
-        }
         return WorldGrid.GetCellCenterWorld(new Vector3Int(col, row, 0));
+    }
+
+    public InteractableObject GetInteractableAt(int col, int row)
+    {
+        if (col >= 0 && row >= 0 && col < ObjectMap.GetLength(0) && row < ObjectMap.GetLength(1))
+            return ObjectMap[col, row];
+        return null;
     }
 
     public void ChangeTile(int col, int row, Tile newTile)
