@@ -28,7 +28,7 @@ public class PlayerController : WorldObject
     GridLocation InteractGridLoc = new GridLocation();
     
     InteractableObject InteractableTile = null;
-    Inventory inventory;
+    Inventory inventory = new Inventory(5);
     Item equipedItem = new Tool();
 
     // Start is called before the first frame update
@@ -40,9 +40,6 @@ public class PlayerController : WorldObject
 
         health_bar = GameObject.Find("Healthbar").GetComponent<UiBar>();
         hunger_bar = GameObject.Find("Hungerbar").GetComponent<UiBar>();
-
-        inventory = new Inventory(5);
-        InteractableTile = null;
     }
 
     public void SetGridLocation(int col, int row)
