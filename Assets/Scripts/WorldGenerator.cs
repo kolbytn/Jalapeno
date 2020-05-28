@@ -31,7 +31,7 @@ public class WorldGenerator : MonoBehaviour
             if (!blocked[locx, locy])
             {
                 Vector3 location = WorldController.Instance.WorldTilemap.GetCellCenterWorld(new Vector3Int(locx, locy, 0));
-                PlayerController player = Instantiate(WorldResources.PlayerController, location, Quaternion.identity).GetComponent<PlayerController>();
+                Player player = Instantiate(WorldResources.Player, location, Quaternion.identity).GetComponent<Player>();
                 // WorldController.Instance.ObjectMap[locx, locy] = player;
                 WorldController.Instance.WorldCamera.ToFollow = player.gameObject;
                 player.SetGridLocation(locx, locy);

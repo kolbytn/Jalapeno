@@ -8,7 +8,7 @@ public class WoodTree : InteractableObject
     {
     }
 
-    public override void  Interact(PlayerController user)
+    public override void  Interact(Human user)
     {
         Debug.Log("treeeee!!");
         

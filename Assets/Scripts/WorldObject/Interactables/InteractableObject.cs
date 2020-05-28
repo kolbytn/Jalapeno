@@ -6,5 +6,5 @@ public abstract class InteractableObject : WorldObject
 {
 
 
-    public abstract void Interact(PlayerController user);
+    public abstract void Interact(Human user);
 }

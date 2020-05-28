@@ -12,7 +12,7 @@ public abstract class Item
         this.Quantity = Quantity;
     }
 
-    public abstract void use(PlayerController user);
+    public abstract void use(Human user);
 
     public int addQuantity(int q){
         if(Quantity + q <= MaxQuantity){

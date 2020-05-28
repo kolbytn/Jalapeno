@@ -29,7 +29,7 @@ public class BerryBush : InteractableObject
         }
     }
 
-    public override void  Interact(PlayerController user)
+    public override void  Interact(Human user)
     {
         RemoveBerries();
         user.Eat(20);
