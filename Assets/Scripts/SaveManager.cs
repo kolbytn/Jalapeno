@@ -61,20 +61,20 @@ public class SaveManager : MonoBehaviour
 
         WorldInfo worldInfo = JsonUtility.FromJson<WorldInfo>(info);
 
-        WorldController.Instance.ObjectMap = new WorldObject[worldInfo.width, worldInfo.height];
+        WorldController.Instance.ObjectMap = new InteractableObject[worldInfo.width, worldInfo.height];
 
         foreach (WorldInfo.ObjectInfo obj in worldInfo.objectArray)
         {
             Vector3 location = new Vector3(obj.locx, obj.locy, 0);
             GameObject prefab = WorldResources.GetGameObject(obj.type);
-            WorldObject worldObject = Instantiate(prefab, location, Quaternion.identity).GetComponent<WorldObject>();
-            worldObject.ObjectFromString(obj.info);
-            WorldController.Instance.ObjectMap[(int)obj.locx, (int)obj.locy] = worldObject;
+            InteractableObject interactableObject = Instantiate(prefab, location, Quaternion.identity).GetComponent<InteractableObject>();
+            interactableObject.ObjectFromString(obj.info);
+            WorldController.Instance.ObjectMap[(int)obj.locx, (int)obj.locy] = interactableObject;
 
-            if (obj.type == "PlayerController")
-            {
-                WorldController.Instance.WorldCamera.ToFollow = worldObject.gameObject;
-            }
+            // if (obj.type == "PlayerController")
+            // {
+            //     WorldController.Instance.WorldCamera.ToFollow = worldObject.gameObject;
+            // }
         }
 
         WorldController.Instance.GroundMap = Utils.Reshape2dArray(worldInfo.groundArray, worldInfo.width, worldInfo.height);

@@ -7,7 +7,7 @@ public static class WorldResources
 {
     public static GameObject WoodTree = Resources.Load<GameObject>("Prefabs/tree");
     public static GameObject BerryBush = Resources.Load<GameObject>("Prefabs/BerryBush");
-    public static GameObject PlayerController = Resources.Load<GameObject>("Prefabs/Player");
+    public static GameObject Player = Resources.Load<GameObject>("Prefabs/Player");
     public static GameObject HighlightPrefab = Resources.Load<GameObject>("Prefabs/HighlightPrefab");
 
 
