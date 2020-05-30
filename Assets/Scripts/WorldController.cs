@@ -8,6 +8,8 @@ public class WorldController : MonoBehaviour
 
     public InteractableObject[,] ObjectMap { get; set; }
 
+    public Actor[] ActorList { get; set; }
+
     public int Width
     {
         get { return GroundMap.GetUpperBound(0) + 1; }
