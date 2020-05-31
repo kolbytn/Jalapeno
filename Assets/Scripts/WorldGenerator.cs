@@ -23,6 +23,7 @@ public class WorldGenerator : MonoBehaviour
 
         IterateWorld();
 
+        WorldController.Instance.ActorList = new Actor[1];
         bool placed = false;
         while (!placed)
         {
@@ -30,9 +31,9 @@ public class WorldGenerator : MonoBehaviour
             int locy = (int)(UnityEngine.Random.value * height);
             if (!blocked[locx, locy])
             {
-                Vector3 location = WorldController.Instance.WorldTilemap.GetCellCenterWorld(new Vector3Int(locx, locy, 0));
+                Vector3 location = new Vector3(locx, locy, 0);
                 Player player = Instantiate(WorldResources.Player, location, Quaternion.identity).GetComponent<Player>();
-                // WorldController.Instance.ObjectMap[locx, locy] = player;
+                WorldController.Instance.ActorList[0] = player;
                 WorldController.Instance.WorldCamera.ToFollow = player.gameObject;
                 player.SetGridLocation(locx, locy);
                 placed = true;

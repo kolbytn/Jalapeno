@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Human : WorldObject
+public class Human : Actor
 {
 
     public Animator animator;
