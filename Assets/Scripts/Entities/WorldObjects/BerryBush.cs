@@ -1,70 +1,66 @@
 ﻿using System;
 using UnityEngine;
 
-public class BerryBush : InteractableObject
-{
-    public Animator animator;
+public class BerryBush : WorldObject {
+
+    public Animator Animator;
 
     bool hasBerries = true;
     float regrowCount = 0;
     readonly float regrowSpeed = 1;
     readonly float regrowMax = 50;
 
-    void Start()
-    {
-        animator.SetBool("HasBerries", hasBerries);
+    void Start() {
+        Animator.SetBool("HasBerries", hasBerries);
     }
 
-    void Update()
-    {
-        if (!hasBerries)
-        {
+    void Update() {
+
+        if (!hasBerries) {
+
             regrowCount += regrowSpeed * Time.deltaTime;
-            if (regrowCount > regrowMax)
-            {
-                animator.SetBool("HasBerries", true);
+            if (regrowCount > regrowMax) {
+
+                Animator.SetBool("HasBerries", true);
                 regrowCount = 0;
                 hasBerries = true;
             }
         }
     }
 
-    public override void  Interact(Human user)
-    {
+    public override void  Interact(Character user) {
         RemoveBerries();
         user.Eat(20);
     }
 
-    public void RemoveBerries()
-    {
-        if (hasBerries)
-        {
-            animator.SetBool("HasBerries", false);
+    public void RemoveBerries() {
+        if (hasBerries) {
+
+            Animator.SetBool("HasBerries", false);
             hasBerries = false;
             regrowCount = 0;
         }
     }
 
     [Serializable]
-    private struct BerryBushInfo
-    {
+    private struct BerryBushInfo {
         public bool hasBerries;
         public float regrowCount;
     }
 
-    public override WorldObject ObjectFromString(string info)
-    {
+    public override IEntity ObjectFromString(string info) 
+        {
         BerryBushInfo bushInfo = JsonUtility.FromJson<BerryBushInfo>(info);
         hasBerries = bushInfo.hasBerries;
         regrowCount = bushInfo.regrowCount;
 
-        animator.SetBool("HasBerries", hasBerries);
+        Animator.SetBool("HasBerries", hasBerries);
 
         return this;
     }
 
-    public override string ObjectToString()
-    {
+    public override string ObjectToString() {
+
         BerryBushInfo bushInfo;
         bushInfo.hasBerries = hasBerries;
         bushInfo.regrowCount = regrowCount;

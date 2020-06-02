@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Actor : WorldObject
-{
+public abstract class Actor : WorldEntity {
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 
     }
 }

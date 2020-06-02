@@ -1,29 +1,29 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class EventSystem : MonoBehaviour
-{
-    public GameObject gameMenu;
-    public Button saveButton;
-    public Button loadButton;
-    public Button exitButton;
+public class EventSystem : MonoBehaviour {
+
+    // Set in editor
+    public GameObject GameMenu;
+    public Button SaveButton;
+    public Button LoadButton;
+    public Button ExitButton;
 
     private bool isVisible = false;
 
-    void Start()
-    {
-        Button saveBtn = saveButton.GetComponent<Button>();
+    void Start() {
+
+        Button saveBtn = SaveButton.GetComponent<Button>();
         saveBtn.onClick.AddListener(SaveGame);
-        Button loadBtn = loadButton.GetComponent<Button>();
+        Button loadBtn = LoadButton.GetComponent<Button>();
         loadBtn.onClick.AddListener(LoadGame);
-        Button exitBtn = exitButton.GetComponent<Button>();
+        Button exitBtn = ExitButton.GetComponent<Button>();
         exitBtn.onClick.AddListener(ExitGame);
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
+    void Update() {
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
             isVisible = !isVisible;
             if (isVisible)
                 Debug.Log("Is Visible");
@@ -31,23 +31,20 @@ public class EventSystem : MonoBehaviour
                 Debug.Log("Is not Visible");
         }
 
-        gameMenu.SetActive(isVisible);
+        GameMenu.SetActive(isVisible);
     }
 
-    void SaveGame()
-    {
+    void SaveGame() {
         WorldController.Instance.SaveGameToFile("test.json");
         Debug.Log("Save Game");
     }
 
-    void LoadGame()
-    {
+    void LoadGame() {
         WorldController.Instance.LoadGameFromFile("test.json");
         Debug.Log("Load Game");
     }
 
-    void ExitGame()
-    {
+    void ExitGame() {
         Application.Quit();
     }
 }

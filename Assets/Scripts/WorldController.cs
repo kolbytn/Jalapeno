@@ -6,7 +6,7 @@ public class WorldController : MonoBehaviour
 {
     public string[,] GroundMap { get; set; }
 
-    public InteractableObject[,] ObjectMap { get; set; }
+    public WorldObject[,] ObjectMap { get; set; }
 
     public Actor[] ActorList { get; set; }
 
@@ -56,7 +56,7 @@ public class WorldController : MonoBehaviour
         return WorldGrid.GetCellCenterWorld(new Vector3Int(col, row, 0));
     }
 
-    public InteractableObject GetInteractableAt(int col, int row)
+    public WorldObject GetInteractableAt(int col, int row)
     {
         if (col >= 0 && row >= 0 && col < ObjectMap.GetLength(0) && row < ObjectMap.GetLength(1))
             return ObjectMap[col, row];
