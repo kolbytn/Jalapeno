@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine;
 
-public class Utils : MonoBehaviour
+public class Utils
 {
     public static double SampleNormal(double mean, double std)
     {

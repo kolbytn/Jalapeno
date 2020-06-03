@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 // Always update the resource member name when renaming classes
-public static class WorldResources
-{
+public static class WorldResources {
+
     public static GameObject WoodTree = Resources.Load<GameObject>("Prefabs/tree");
     public static GameObject BerryBush = Resources.Load<GameObject>("Prefabs/BerryBush");
     public static GameObject Player = Resources.Load<GameObject>("Prefabs/Player");
@@ -31,13 +31,11 @@ public static class WorldResources
     public static Tile RockTile = Resources.Load<Tile>("Tiles/Test/1bit_small_29");
 
 
-    public static GameObject GetGameObject(string name)
-    {
+    public static GameObject GetGameObject(string name) {
         return (GameObject)Type.GetType("WorldResources").GetField(name)?.GetValue(null);
     }
 
-    public static Tile GetTile(string name)
-    {
+    public static Tile GetTile(string name) {
         return (Tile)Type.GetType("WorldResources").GetField(name)?.GetValue(null);
     }
 }

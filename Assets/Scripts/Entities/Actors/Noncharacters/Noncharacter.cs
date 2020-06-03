@@ -2,27 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Beast : Actor
-{
+public class Noncharacter : Actor {
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 
     }
 
-    public override WorldObject ObjectFromString(string info)
-    {
+    public override IEntity ObjectFromString(string info) {
         return this;
     }
 
-    public override string ObjectToString()
-    {
+    public override string ObjectToString() {
         return "";
     }
 }

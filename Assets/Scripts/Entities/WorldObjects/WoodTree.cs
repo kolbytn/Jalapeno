@@ -1,30 +1,22 @@
 ﻿using System;
 using UnityEngine;
 
-public class WoodTree : InteractableObject
-{
+public class WoodTree : WorldObject {
+
     [Serializable]
-    private struct WoodTreeInfo
-    {
-    }
+    private struct WoodTreeInfo {}
 
-    public override void  Interact(Human user)
-    {
+    public override void  Interact(Character user) {
         Debug.Log("treeeee!!");
-        
     }
 
-    public override WorldObject ObjectFromString(string info)
-    {
+    public override IEntity ObjectFromString(string info) {
         WoodTreeInfo treeInfo = JsonUtility.FromJson<WoodTreeInfo>(info);
-
         return this;
     }
 
-    public override string ObjectToString()
-    {
+    public override string ObjectToString() {
         WoodTreeInfo treeInfo;
-
         return JsonUtility.ToJson(treeInfo);
     }
 }

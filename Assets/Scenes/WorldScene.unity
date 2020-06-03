@@ -287,10 +287,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c06971d76f457349a0f5da169749406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMenu: {fileID: 9176274493798054474}
-  saveButton: {fileID: 9176274494526139230}
-  loadButton: {fileID: 9176274493496006263}
-  exitButton: {fileID: 9176274492808744180}
+  GameMenu: {fileID: 9176274493798054474}
+  SaveButton: {fileID: 9176274494526139230}
+  LoadButton: {fileID: 9176274493496006263}
+  ExitButton: {fileID: 9176274492808744180}
 --- !u!1 &244107295
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,7 +391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30aaa2a11289d224e9a9cb2f4af4bae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bar: {fileID: 244107297}
+  Bar: {fileID: 244107297}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,8 +431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf87a92072f1e9e4c8b3cb2bd13f7fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToFollow: {fileID: 0}
-  CameraMoveSpeed: 5
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -664,7 +662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30aaa2a11289d224e9a9cb2f4af4bae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bar: {fileID: 786686771}
+  Bar: {fileID: 786686771}
 --- !u!1 &935911331
 GameObject:
   m_ObjectHideFlags: 0
