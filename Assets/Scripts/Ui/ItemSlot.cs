@@ -7,14 +7,16 @@ public class ItemSlot : MonoBehaviour
 {
 
     public Image ItemIcon;
+    public Text Count;
 
     void Start() {
         // ItemIcon.enabled = false;
     }
 
-    public void SetIcon(Sprite sprite) {
+    public void SetItem(Item item) {
         ItemIcon.enabled = true;
-        ItemIcon.sprite = sprite;
+        ItemIcon.sprite = item.GetIconSprite();
+        Count.text = item.Quantity.ToString();
     }
 
     public void ClearIcon() {

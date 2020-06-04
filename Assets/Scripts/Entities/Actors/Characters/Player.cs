@@ -6,6 +6,8 @@ public class Player : Character {
 
     UiBar healthBar;
     UiBar hungerBar;
+    UiHotbar hotbar;
+    Inventory hotBarInventory = new Inventory(4);
     private GameObject hightlightSprite = null;
 
 
@@ -23,6 +25,15 @@ public class Player : Character {
 
         healthBar = GameObject.Find("Healthbar").GetComponent<UiBar>();
         hungerBar = GameObject.Find("Hungerbar").GetComponent<UiBar>();
+        hotbar = GameObject.Find("Inventory").GetComponent<UiHotbar>();
+
+        hotBarInventory.AddItem(new Food(10));
+        hotBarInventory.AddItem(new Food(5));
+        // hotBarInventory.AddItem(new Food(5));
+        // hotBarInventory.AddItem(new Food(9));
+
+
+        hotbar.SetInventory(hotBarInventory);
     }
 
     void Update() {

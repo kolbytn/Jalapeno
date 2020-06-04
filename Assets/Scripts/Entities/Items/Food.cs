@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class Tool : Item {
+public class Food : Item {
 
-    public Tool(int Quantity=1) : base(Quantity) {
-        maxQuantity = 1;
+    public Food(int Quantity=1) : base(Quantity) {
+        maxQuantity = 10;
     }
 
     public override void use(Character user) {
@@ -11,7 +11,7 @@ public class Tool : Item {
     }
 
     public override Sprite GetIconSprite() {
-        return null;
+        return WorldResources.BerriesIcon;
     }
 
     public override string ObjectToString() {

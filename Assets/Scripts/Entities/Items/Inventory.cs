@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Inventory : IEntity {
 
-    readonly int totalSlots;
-    readonly int occupiedSlots;
+    int occupiedSlots;
 
     Item[] items;
 
-    public Inventory(int TotalSlots, Item[] StartItems = null) {
-        this.totalSlots = TotalSlots;
-        items = new Item[TotalSlots];
+    public Inventory(int size, Item[] StartItems = null) {
+        items = new Item[size];
         
         if (StartItems != null) {
             foreach (Item item in StartItems) {
@@ -74,6 +72,14 @@ public class Inventory : IEntity {
 
     public void Remove() {
         // TODO: add item removal functionality
+    }
+
+    public Item ItemAt(int i) {
+        return items[i];
+    }
+
+    public int Size() {
+        return items.Length;
     }
 
     [Serializable]

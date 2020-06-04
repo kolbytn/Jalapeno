@@ -10,16 +10,17 @@ public class UiHotbar : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         slots = GetComponentsInChildren<ItemSlot>();
-        Debug.Log("chicken");
 
-        foreach(ItemSlot slot in slots) {
-            Debug.Log("slot");
-            slot.SetIcon(WorldResources.BerriesIcon);
+        
+    }
+
+    public void SetInventory(Inventory inventory) {
+        for(int i=0; i<inventory.Size(); i++) {
+            Item item = inventory.ItemAt(i);
+            if (item != null) {
+                slots[i].SetItem(inventory.ItemAt(i));
+            }
         }
     }
 
-    // Update is called once per frame
-    void Update() {
-        
-    }
 }

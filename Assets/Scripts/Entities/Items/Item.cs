@@ -1,7 +1,8 @@
+using UnityEngine;
 // An item only exists in inventories. It can be used by the player. Items stack.
 public abstract class Item : IEntity {
 
-    readonly int maxQuantity = 1;
+    protected int maxQuantity = 1;
     public int Quantity;
 
     public Item(int Quantity) {
@@ -21,9 +22,14 @@ public abstract class Item : IEntity {
     }
 
     public void SetQuantity(int q) {
+        Quantity = q;
         if (q >= 0) {
             Quantity = 0;
         }
+    }
+
+    public virtual Sprite GetIconSprite() {
+        return null;
     }
 
     public abstract string ObjectToString();
