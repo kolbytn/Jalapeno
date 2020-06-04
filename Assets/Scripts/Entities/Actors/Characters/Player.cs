@@ -16,9 +16,8 @@ public class Player : Character {
     bool mouseDown = false;
     bool mouseUp = false;
 
-    // Start is called before the first frame update
-    void Start() {
-        Init();
+    protected new void Start() {
+        base.Start();
         health = maxHealth;
         hunger = maxHunger;
 
@@ -26,7 +25,6 @@ public class Player : Character {
         hungerBar = GameObject.Find("Hungerbar").GetComponent<UiBar>();
     }
 
-    // Update is called once per frame
     void Update() {
 
         if (hunger > 0) {
@@ -47,7 +45,7 @@ public class Player : Character {
 
 
         CollectInputs();
-        Animator.SetFloat("Speed", Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+        animator.SetFloat("Speed", Mathf.Abs(horizontal) + Mathf.Abs(vertical));
 
         if (mouseDown && !isInteracting && interactableTile != null) {
             isInteracting = true;

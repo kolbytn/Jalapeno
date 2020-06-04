@@ -2,6 +2,8 @@
 
 public abstract class WorldEntity : MonoBehaviour, IEntity {
 
+    protected void Start() {}
+
     public abstract string ObjectToString();
 
     public abstract IEntity ObjectFromString(string info);

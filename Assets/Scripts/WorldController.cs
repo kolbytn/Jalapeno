@@ -10,6 +10,18 @@ public class WorldController : MonoBehaviour
 
     public Actor[] ActorList { get; set; }
 
+    private Player player;
+    public Player Player {
+        get {
+            if (player == null) 
+                foreach (Actor actor in ActorList) 
+                    if (actor is Player) 
+                        player = (Player)actor;
+
+            return player;
+        }
+    }
+
     public int Width
     {
         get { return GroundMap.GetUpperBound(0) + 1; }

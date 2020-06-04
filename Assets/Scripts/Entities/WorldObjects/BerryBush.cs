@@ -10,7 +10,8 @@ public class BerryBush : WorldObject {
     readonly float regrowSpeed = 1;
     readonly float regrowMax = 50;
 
-    void Start() {
+    protected new void Start() {
+        base.Start();
         Animator.SetBool("HasBerries", hasBerries);
     }
 
