@@ -1,9 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Character : Actor {
-
-    public Animator Animator;
+public abstract class Character : Actor {
 
     protected float health;
     protected float hunger;
@@ -14,13 +12,16 @@ public class Character : Actor {
     protected float lookAngle = 0;
     protected bool isInteracting = false;
 
-    protected Rigidbody2D rigidbody2d;
     protected GridLocation gridLoc = new GridLocation();
     protected GridLocation interactGridLoc = new GridLocation();
     protected WorldObject interactableTile = null;
 
     protected Inventory inventory = new Inventory(5);
     protected Item equipedItem = new Tool();
+
+    protected new void Start() {
+        base.Start();
+    }
 
     public WorldObject GetInteractableTile() {
         return interactableTile;
@@ -32,10 +33,6 @@ public class Character : Actor {
     
     public Item GetEquipedItem() {
         return equipedItem;
-    }
-
-    protected void Init() {
-        rigidbody2d = GetComponent<Rigidbody2D>();
     }
 
     public void SetGridLocation(int col, int row) {

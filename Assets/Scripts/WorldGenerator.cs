@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class WorldGenerator : MonoBehaviour {
 
-    readonly int width = 100;
-    readonly int height = 100;
+    readonly int width = 25;
+    readonly int height = 25;
     readonly int tileCount = 2;
     readonly double waterProbability = .001;
     readonly double rockProbability = .001;
@@ -22,7 +22,9 @@ public class WorldGenerator : MonoBehaviour {
 
         IterateWorld();
 
-        WorldController.Instance.ActorList = new Actor[1];
+        WorldController.Instance.ActorList = new Actor[2];
+
+        // Place player
         bool placed = false;
         while (!placed) {
 
@@ -35,6 +37,23 @@ public class WorldGenerator : MonoBehaviour {
                 WorldController.Instance.ActorList[0] = player;
                 WorldController.Instance.WorldCamera.ToFollow = player.gameObject;
                 player.SetGridLocation(locx, locy);
+                blocked[locx, locy] = true;
+                placed = true;
+            }
+        }
+
+        // Place dog
+        placed = false;
+        while (!placed) {
+
+            int locx = (int)(UnityEngine.Random.value * width);
+            int locy = (int)(UnityEngine.Random.value * height);
+            if (!blocked[locx, locy]) {
+
+                Vector3 location = new Vector3(locx, locy, 0);
+                Dog dog = Instantiate(WorldResources.Dog, location, Quaternion.identity).GetComponent<Dog>();
+                WorldController.Instance.ActorList[1] = dog;
+                blocked[locx, locy] = true;
                 placed = true;
             }
         }
