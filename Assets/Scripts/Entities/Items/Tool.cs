@@ -6,6 +6,14 @@ public class Tool : Item {
     public override void use(Character user) {
         user.GetInteractableTile().Interact(user);
     }
+
+    public override string ObjectToString() {
+        return "";
+    }
+
+    public override IEntity ObjectFromString(string info) {
+        return this;
+    }
 }
 
 /**

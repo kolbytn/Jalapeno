@@ -120,23 +120,26 @@ public class Character : Actor {
     }
 
     [Serializable]
-    private struct HumanInfo {
-        public float health;
-        public float hunger;
+    private struct CharacterInfo {
+        public float Health;
+        public float Hunger;
+        public string InventoryInfo;
     }
 
     public override IEntity ObjectFromString(string info) {
-        HumanInfo humanInfo = JsonUtility.FromJson<HumanInfo>(info);
-        health = humanInfo.health;
-        hunger = humanInfo.hunger;
+        CharacterInfo humanInfo = JsonUtility.FromJson<CharacterInfo>(info);
+        health = humanInfo.Health;
+        hunger = humanInfo.Hunger;
+        inventory.ObjectFromString(humanInfo.InventoryInfo);
 
         return this;
     }
 
     public override string ObjectToString() {
-        HumanInfo info;
-        info.health = health;
-        info.hunger = hunger;
+        CharacterInfo info;
+        info.Health = health;
+        info.Hunger = hunger;
+        info.InventoryInfo = inventory.ObjectToString();
 
         return JsonUtility.ToJson(info);
     }

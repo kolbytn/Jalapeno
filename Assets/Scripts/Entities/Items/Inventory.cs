@@ -1,5 +1,8 @@
 // A glorified list of items
-public class Inventory {
+using System;
+using UnityEngine;
+
+public class Inventory : IEntity {
 
     readonly int totalSlots;
     readonly int occupiedSlots;
@@ -73,5 +76,51 @@ public class Inventory {
         // TODO: add item removal functionality
     }
 
+    [Serializable]
+    private struct InventoryInfo {
 
+        public ItemInfo[] itemArray;
+
+        [Serializable]
+        public struct ItemInfo {
+
+            public string Type;
+            public string Info;
+        }
+    }
+
+    public string ObjectToString() {
+        InventoryInfo info;
+
+        info.itemArray = new InventoryInfo.ItemInfo[items.Length];
+        for (int i = 0; i < items.Length; i++) {
+
+            if (items[i] != null) {
+                InventoryInfo.ItemInfo itemInfo;
+                itemInfo.Type = items[i].GetType().ToString();
+                itemInfo.Info = items[i].ObjectToString();
+                info.itemArray[i] = itemInfo;
+            }
+        }
+
+        return JsonUtility.ToJson(info);
+    }
+
+    public IEntity ObjectFromString(string info) {
+        InventoryInfo inventoryInfo = JsonUtility.FromJson<InventoryInfo>(info);
+
+        // Set interactable objects
+        items = new Item[inventoryInfo.itemArray.Length];
+        for (int i = 0; i < inventoryInfo.itemArray.Length; i++) {
+
+            if (items[i] != null) {
+                object newObject = Activator.CreateInstance(null, inventoryInfo.itemArray[i].Type);
+                Item newItem = (Item)newObject;
+                newItem.ObjectFromString(inventoryInfo.itemArray[i].Info);
+                items[i] = newItem;
+            }
+        }
+
+        return this;
+    }
 }

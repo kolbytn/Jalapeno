@@ -1,5 +1,5 @@
 // An item only exists in inventories. It can be used by the player. Items stack.
-public abstract class Item {
+public abstract class Item : IEntity {
 
     readonly int maxQuantity = 1;
     public int Quantity;
@@ -25,4 +25,8 @@ public abstract class Item {
             Quantity = 0;
         }
     }
+
+    public abstract string ObjectToString();
+
+    public abstract IEntity ObjectFromString(string info);
 }
