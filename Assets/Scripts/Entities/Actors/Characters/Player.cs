@@ -19,9 +19,6 @@ public class Player : Character {
     bool mouseUp = false;
     float mouseScroll = 0; //negative down, 0 no change, positive up
 
-
-    int equipedItemIndex = 0;
-
     protected new void Start() {
         base.Start();
         health = maxHealth;
@@ -31,11 +28,9 @@ public class Player : Character {
         hungerBar = GameObject.Find("Hungerbar").GetComponent<UiBar>();
         hotbar = GameObject.Find("Inventory").GetComponent<UiHotbar>();
 
-        hotBarInventory.AddItem(new Food(10));
+        hotBarInventory.AddItem(new Tool());
         hotBarInventory.AddItem(new Food(5));
         hotBarInventory.AddItem(new Food(2));
-        hotBarInventory.AddItem(new Tool());
-        hotBarInventory.AddItem(new Tool());
 
 
         hotbar.SetInventory(hotBarInventory);
@@ -53,7 +48,6 @@ public class Player : Character {
         bool changed = CalcInteractableGridPos();
         
         if (changed) {
-
             Destroy(hightlightSprite);
             hightlightSprite = GameObject.Instantiate(WorldResources.HighlightPrefab,
                 WorldController.Instance.GetCellLocation(interactGridLoc.col, interactGridLoc.row),
@@ -64,27 +58,34 @@ public class Player : Character {
         CollectInputs();
         animator.SetFloat("Speed", Mathf.Abs(horizontal) + Mathf.Abs(vertical));
 
-        if (mouseDown && !isInteracting && interactableTile != null) {
+        if (mouseDown && !isInteracting) {
             isInteracting = true;
-            interactableTile.Interact(this);
-            equipedItem.use(this);
+            if (equipedItem != null) {
+                equipedItem.use(this);
+            }
+            else {
+                // default behavior
+                if (interactableTile != null){
+                    interactableTile.Interact(this);
+                }
+            }
         }
         else if(mouseUp) {
             isInteracting = false;
         }
 
         if (mouseScroll > 0){
-            equipedItemIndex ++;
+            equipedItemIndex++;
             if (equipedItemIndex >= hotBarInventory.Size())
                 equipedItemIndex=0;
-            hotbar.SetEquiped(equipedItemIndex);
         }
         else if (mouseScroll < 0) {
             equipedItemIndex--;
             if (equipedItemIndex < 0)
                 equipedItemIndex = hotBarInventory.Size()-1;
-            hotbar.SetEquiped(equipedItemIndex);
         }
+
+        UpdateInventory();
 
     }
 
@@ -94,6 +95,20 @@ public class Player : Character {
 
         rigidbody2d.MovePosition(newPosition);
         rigidbody2d.MoveRotation(lookAngle);
+    }
+
+    void UpdateInventory() {
+        hotBarInventory.ClearEmptyItems();
+        equipedItem = hotBarInventory.ItemAt(equipedItemIndex);
+        hotbar.SetInventory(hotBarInventory);
+        hotbar.SetEquiped(equipedItemIndex);
+    }
+
+    public override void GiveItem(Item item){
+        Item remaining = hotBarInventory.AddItem(item);
+        if (remaining == null) {
+            inventory.AddItem(remaining);
+        }
     }
 
 

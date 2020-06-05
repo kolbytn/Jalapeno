@@ -7,7 +7,8 @@ public class Food : Item {
     }
 
     public override void use(Character user) {
-        user.GetInteractableTile().Interact(user);
+        user.Eat(5);
+        Quantity--;
     }
 
     public override Sprite GetIconSprite() {

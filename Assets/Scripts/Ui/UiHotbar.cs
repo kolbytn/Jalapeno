@@ -19,6 +19,9 @@ public class UiHotbar : MonoBehaviour
             if (item != null) {
                 slots[i].SetItem(inventory.ItemAt(i));
             }
+            else {
+                slots[i].ClearIcon();
+            }
         }
     }
 

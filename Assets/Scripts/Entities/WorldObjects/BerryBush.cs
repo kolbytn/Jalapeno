@@ -30,13 +30,14 @@ public class BerryBush : WorldObject {
     }
 
     public override void  Interact(Character user) {
-        RemoveBerries();
-        user.Eat(20);
+        if (hasBerries) {
+            RemoveBerries();
+            user.GiveItem(new Food(3));
+        }
     }
 
     public void RemoveBerries() {
         if (hasBerries) {
-
             Animator.SetBool("HasBerries", false);
             hasBerries = false;
             regrowCount = 0;

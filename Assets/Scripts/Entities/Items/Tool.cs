@@ -7,7 +7,10 @@ public class Tool : Item {
     }
 
     public override void use(Character user) {
-        user.GetInteractableTile().Interact(user);
+        // if an item needs the interactable tile it will have to check if it's null
+        if (user.GetInteractableTile() != null){
+            user.GetInteractableTile().Interact(user);
+        }
     }
 
     public override Sprite GetIconSprite() {

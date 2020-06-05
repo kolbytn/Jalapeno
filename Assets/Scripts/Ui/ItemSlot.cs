@@ -22,6 +22,7 @@ public class ItemSlot : MonoBehaviour
     public void ClearIcon() {
         ItemIcon.sprite = null;
         ItemIcon.enabled = false;
+        Count.text = "";
     }
 
     public void Highlight() {
