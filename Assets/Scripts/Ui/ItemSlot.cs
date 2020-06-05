@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
 {
-
+    public Image SlotIcon;
     public Image ItemIcon;
     public Text Count;
 
@@ -22,5 +22,13 @@ public class ItemSlot : MonoBehaviour
     public void ClearIcon() {
         ItemIcon.sprite = null;
         ItemIcon.enabled = false;
+    }
+
+    public void Highlight() {
+        SlotIcon.color = new Color(255, 255, 0, 255);
+    }
+
+    public void UnHighlight() {
+        SlotIcon.color = new Color(255, 255, 255, 255);
     }
 }

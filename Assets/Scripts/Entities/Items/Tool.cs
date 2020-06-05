@@ -11,7 +11,7 @@ public class Tool : Item {
     }
 
     public override Sprite GetIconSprite() {
-        return null;
+        return WorldResources.ShovelIcon;
     }
 
     public override string ObjectToString() {

@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class UiHotbar : MonoBehaviour
 {
-
+    int equipedSlot = 0;
     ItemSlot[] slots;
 
     // Start is called before the first frame update
     void Start() {
         slots = GetComponentsInChildren<ItemSlot>();
-
         
     }
 
@@ -21,6 +20,12 @@ public class UiHotbar : MonoBehaviour
                 slots[i].SetItem(inventory.ItemAt(i));
             }
         }
+    }
+
+    public void SetEquiped(int i) {
+        slots[equipedSlot].UnHighlight();
+        slots[i].Highlight();
+        equipedSlot = i;
     }
 
 }

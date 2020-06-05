@@ -32,7 +32,7 @@ public static class WorldResources {
     public static Tile RockTile = Resources.Load<Tile>("Tiles/Test/1bit_small_29");
 
     public static Sprite BerriesIcon = Resources.Load<Sprite>("ItemIcons/Berries");
-
+    public static Sprite ShovelIcon = Resources.Load<Sprite>("ItemIcons/Shovel");
 
     public static GameObject GetGameObject(string name) {
         return (GameObject)Type.GetType("WorldResources").GetField(name)?.GetValue(null);

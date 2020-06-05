@@ -23,7 +23,7 @@ public abstract class Item : IEntity {
 
     public void SetQuantity(int q) {
         Quantity = q;
-        if (q >= 0) {
+        if (q < 0) {
             Quantity = 0;
         }
     }
