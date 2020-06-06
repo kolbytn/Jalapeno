@@ -6,7 +6,7 @@ public class Food : Item {
         maxQuantity = 10;
     }
 
-    public override void use(Character user) {
+    public override void Use(Character user) {
         user.Eat(5);
         Quantity--;
     }

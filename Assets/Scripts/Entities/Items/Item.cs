@@ -13,7 +13,7 @@ public abstract class Item : IEntity {
         this.Quantity = Quantity;
     }
 
-    public abstract void use(Character user);
+    public abstract void Use(Character user);
 
     public int AddQuantity(int q) {
         if(Quantity + q <= maxQuantity) {

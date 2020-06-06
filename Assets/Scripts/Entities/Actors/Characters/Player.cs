@@ -61,7 +61,7 @@ public class Player : Character {
         if (mouseDown && !isInteracting) {
             isInteracting = true;
             if (equipedItem != null) {
-                equipedItem.use(this);
+                equipedItem.Use(this);
             }
             else {
                 // default behavior
