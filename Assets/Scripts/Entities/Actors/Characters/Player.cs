@@ -6,6 +6,8 @@ public class Player : Character {
 
     UiBar healthBar;
     UiBar hungerBar;
+    UiHotbar hotbar;
+    Inventory hotBarInventory = new Inventory(4);
     private GameObject hightlightSprite = null;
 
 
@@ -15,6 +17,7 @@ public class Player : Character {
     float vertical = 0;
     bool mouseDown = false;
     bool mouseUp = false;
+    float mouseScroll = 0; //negative down, 0 no change, positive up
 
     protected new void Start() {
         base.Start();
@@ -23,6 +26,15 @@ public class Player : Character {
 
         healthBar = GameObject.Find("Healthbar").GetComponent<UiBar>();
         hungerBar = GameObject.Find("Hungerbar").GetComponent<UiBar>();
+        hotbar = GameObject.Find("Inventory").GetComponent<UiHotbar>();
+
+        hotBarInventory.AddItem(new Tool());
+        hotBarInventory.AddItem(new Food(5));
+        hotBarInventory.AddItem(new Food(2));
+
+
+        hotbar.SetInventory(hotBarInventory);
+        hotbar.SetEquiped(equipedItemIndex);
     }
 
     void Update() {
@@ -36,7 +48,6 @@ public class Player : Character {
         bool changed = CalcInteractableGridPos();
         
         if (changed) {
-
             Destroy(hightlightSprite);
             hightlightSprite = GameObject.Instantiate(WorldResources.HighlightPrefab,
                 WorldController.Instance.GetCellLocation(interactGridLoc.col, interactGridLoc.row),
@@ -47,14 +58,34 @@ public class Player : Character {
         CollectInputs();
         animator.SetFloat("Speed", Mathf.Abs(horizontal) + Mathf.Abs(vertical));
 
-        if (mouseDown && !isInteracting && interactableTile != null) {
+        if (mouseDown && !isInteracting) {
             isInteracting = true;
-            interactableTile.Interact(this);
-            equipedItem.use(this);
+            if (equipedItem != null) {
+                equipedItem.Use(this);
+            }
+            else {
+                // default behavior
+                if (interactableTile != null){
+                    interactableTile.Interact(this);
+                }
+            }
         }
         else if(mouseUp) {
             isInteracting = false;
         }
+
+        if (mouseScroll > 0){
+            equipedItemIndex++;
+            if (equipedItemIndex >= hotBarInventory.Size())
+                equipedItemIndex=0;
+        }
+        else if (mouseScroll < 0) {
+            equipedItemIndex--;
+            if (equipedItemIndex < 0)
+                equipedItemIndex = hotBarInventory.Size()-1;
+        }
+
+        UpdateInventory();
 
     }
 
@@ -66,6 +97,20 @@ public class Player : Character {
         rigidbody2d.MoveRotation(lookAngle);
     }
 
+    void UpdateInventory() {
+        hotBarInventory.ClearEmptyItems();
+        equipedItem = hotBarInventory.ItemAt(equipedItemIndex);
+        hotbar.SetInventory(hotBarInventory);
+        hotbar.SetEquiped(equipedItemIndex);
+    }
+
+    public override void GiveItem(Item item){
+        Item remaining = hotBarInventory.AddItem(item);
+        if (remaining == null) {
+            inventory.AddItem(remaining);
+        }
+    }
+
 
     // collects inputs and calculates look direction
     void CollectInputs() {
@@ -74,6 +119,7 @@ public class Player : Character {
         vertical = Input.GetAxis("Vertical");
         mouseDown = Input.GetMouseButtonDown(0);
         mouseUp = Input.GetMouseButtonUp(0);
+        mouseScroll = Input.mouseScrollDelta.y;
 
         Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);

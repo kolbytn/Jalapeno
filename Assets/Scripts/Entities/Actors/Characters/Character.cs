@@ -17,7 +17,8 @@ public abstract class Character : Actor {
     protected WorldObject interactableTile = null;
 
     protected Inventory inventory = new Inventory(5);
-    protected Item equipedItem = new Tool();
+    protected Item equipedItem;
+    protected int equipedItemIndex = 0;
 
     protected new void Start() {
         base.Start();
@@ -105,6 +106,10 @@ public abstract class Character : Actor {
         interactableTile = WorldController.Instance.GetInteractableAt(interactGridLoc.col, interactGridLoc.row);
 
         return changed;
+    }
+
+    public virtual void GiveItem(Item item){
+        inventory.AddItem(item);
     }
 
 

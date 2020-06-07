@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Inventory : IEntity {
 
-    readonly int totalSlots;
-    readonly int occupiedSlots;
+    int occupiedSlots;
 
     Item[] items;
 
-    public Inventory(int TotalSlots, Item[] StartItems = null) {
-        this.totalSlots = TotalSlots;
-        items = new Item[TotalSlots];
+    public Inventory(int size, Item[] StartItems = null) {
+        items = new Item[size];
         
         if (StartItems != null) {
             foreach (Item item in StartItems) {
@@ -31,19 +29,6 @@ public class Inventory : IEntity {
             if (new_item == null) {
                 return null;
             }
-            // this should be unnecessary, but keeping just in case
-            // if (item == null){
-            //     break;
-            // }
-            // if(itemType == item.GetType()) {
-            //     int overflow = item.addQuantity(new_item.Quantity);
-            //     if(overflow > 0){
-            //         item.setQuantity(overflow);
-            //     }
-            //     else {
-            //         return null;
-            //     }
-            // }
         }
         return new_item;
     }
@@ -72,8 +57,28 @@ public class Inventory : IEntity {
         return new_item; // return the leftover values
     }
 
-    public void Remove() {
-        // TODO: add item removal functionality
+
+    // Sets the item at the given location to null
+    public void Remove(int slot) {
+        items[slot] = null;
+    }
+
+
+    // Loops through all the items and removes the ones that have a quantity lower than 1
+    public void ClearEmptyItems() {
+        for(int i=0; i<items.Length; i++) {
+            if (items[i]!=null && items[i].Quantity <= 0) {
+                Remove(i);
+            }
+        }
+    }
+
+    public Item ItemAt(int i) {
+        return items[i];
+    }
+
+    public int Size() {
+        return items.Length;
     }
 
     [Serializable]
