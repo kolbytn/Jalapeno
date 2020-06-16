@@ -3,7 +3,6 @@ using UnityEngine;
 public class Tool : Item {
 
     public Tool(int Quantity=1) : base(Quantity) {
-        maxQuantity = 1;
     }
 
     public override void Use(Character user) {
