@@ -7,7 +7,7 @@ public class Food : Item {
     }
 
     public override void Use(Character user) {
-        user.Eat(5);
+        user.Eat(15);
         Quantity--;
     }
 

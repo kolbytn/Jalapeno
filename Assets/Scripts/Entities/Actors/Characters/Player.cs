@@ -12,6 +12,7 @@ public class Player : Character {
 
 
     readonly float hungerSpeed = 1;
+    readonly float healthCatchUpSpeed = 0.1f;
 
     float horizontal = 0;
     float vertical = 0;
@@ -41,7 +42,17 @@ public class Player : Character {
 
         if (hunger > 0) {
             hunger -= hungerSpeed * Time.deltaTime;
+            if (hunger < 0) {
+                hunger = 0;
+            }
             hungerBar.UpdateValue(hunger);
+        }
+
+        health += (hunger - health) * healthCatchUpSpeed * Time.deltaTime;
+        healthBar.UpdateValue(health);
+
+        if (health <= 0) {
+            Application.Quit(); // disabled in editor
         }
 
         CalcGridPosition();
