@@ -24,8 +24,8 @@ public class Player : Character {
         health = maxHealth;
         hunger = maxHunger;
 
-        healthBar = GameObject.Find("Healthbar").GetComponent<UiBar>();
-        hungerBar = GameObject.Find("Hungerbar").GetComponent<UiBar>();
+        healthBar = GameObject.Find("HealthBar").GetComponent<UiBar>();
+        hungerBar = GameObject.Find("HungerBar").GetComponent<UiBar>();
         hotbar = GameObject.Find("Inventory").GetComponent<UiHotbar>();
 
         hotBarInventory.AddItem(new Tool());
