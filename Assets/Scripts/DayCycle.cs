@@ -75,4 +75,8 @@ public class DayCycle : MonoBehaviour
             skyLight.intensity = nightIntensity;
         }
     }
+
+    public float GetLightIntensity() {
+        return skyLight.intensity;
+    }
 }

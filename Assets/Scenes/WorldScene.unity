@@ -835,7 +835,7 @@ GameObject:
   - component: {fileID: 744035554}
   - component: {fileID: 744035553}
   m_Layer: 0
-  m_Name: Global Light 2D
+  m_Name: SkyLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

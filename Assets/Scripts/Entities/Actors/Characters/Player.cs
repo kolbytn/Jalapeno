@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class Player : Character {
 
@@ -8,7 +9,8 @@ public class Player : Character {
     UiBar hungerBar;
     UiHotbar hotbar;
     Inventory hotBarInventory = new Inventory(4);
-    private GameObject hightlightSprite = null;
+    GameObject hightlightSprite = null;
+    public Light2D flashLight;
 
 
     readonly float hungerSpeed = 1;
@@ -50,6 +52,8 @@ public class Player : Character {
 
         health += (hunger - health) * healthCatchUpSpeed * Time.deltaTime;
         healthBar.UpdateValue(health);
+
+        flashLight.intensity = 1 - WorldController.Instance.DayCycleController.GetLightIntensity();
 
         if (health <= 0) {
             Application.Quit(); // disabled in editor
