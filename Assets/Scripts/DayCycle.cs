@@ -28,6 +28,7 @@ public class DayCycle : MonoBehaviour
     void Start()
     {
         skyLight = GetComponent<Light2D>();
+        skyLight.intensity = nightIntensity;
         fullDayLength = sunriseLength + sunnyLength + sunsetLength + nightLength;
         sunriseSpeed = Mathf.Abs(dayIntensity-nightIntensity)/(sunriseLength*60);
         sunsetSpeed = Mathf.Abs(nightIntensity-dayIntensity)/(sunsetLength*60);
