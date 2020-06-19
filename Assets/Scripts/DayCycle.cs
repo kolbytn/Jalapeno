@@ -3,18 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
+public enum DaySection
+{
+    sunrise,
+    daytime,
+    sunset,
+    night
+}
+
 public class DayCycle : MonoBehaviour
 {
 
     Light2D skyLight;
     float dayTime;
-    float periodTime;
+    public int dayCount{
+        get;
+        private set;
+    }
+    public DaySection daySection {
+        get;
+        private set;
+    }
 
     // all time measured in minutes
-    float sunriseLength = 0.25f;
-    float sunnyLength = 1;
-    float sunsetLength = 0.25f;
-    float nightLength = 0.5f;
+    float sunriseLength = 2f;
+    float sunnyLength = 4f;
+    float sunsetLength = 2f;
+    float nightLength = 3f;
     float fullDayLength;
 
     float dayIntensity = 1;
@@ -32,7 +47,6 @@ public class DayCycle : MonoBehaviour
         fullDayLength = sunriseLength + sunnyLength + sunsetLength + nightLength;
         sunriseSpeed = Mathf.Abs(dayIntensity-nightIntensity)/(sunriseLength*60);
         sunsetSpeed = Mathf.Abs(nightIntensity-dayIntensity)/(sunsetLength*60);
-        Debug.Log(sunriseSpeed);
     }
 
     // Update is called once per frame
@@ -44,39 +58,50 @@ public class DayCycle : MonoBehaviour
             dayTime -= fullDayLength;
         }
 
-        if (dayTime < sunriseLength) {
-            // it is sunrise
-            // Debug.Log("Sunrise");
+        DaySection section = GetDaySection();
+        if (daySection == DaySection.night && section == DaySection.sunrise) {
+            dayCount++;
+            Debug.Log(dayCount.ToString());
+        }
+        daySection = section;
+        
+        if (daySection == DaySection.sunrise) {
             skyLight.intensity += sunriseSpeed * Time.deltaTime;
             if (skyLight.intensity > dayIntensity) { 
                 skyLight.intensity = dayIntensity;
             }
-            // Debug.Log(skyLight.intensity.ToString());
         }
-        else if (dayTime < sunriseLength + sunnyLength) {
-            // it is sunny
-            // Debug.Log("day");
-
+        else if (daySection == DaySection.daytime) {
             skyLight.intensity = dayIntensity;
         }
-        else if (dayTime < sunriseLength + sunnyLength + sunsetLength) {
-            // it is sunset
-            // Debug.Log("sunset");
-
+        else if (daySection == DaySection.sunset) {
             skyLight.intensity -= sunsetSpeed * Time.deltaTime;
             if (skyLight.intensity < nightIntensity) { 
                 skyLight.intensity = nightIntensity;
             }
         }
         else{
-            // it is night
-            // Debug.Log("night");
-
             skyLight.intensity = nightIntensity;
         }
     }
 
     public float GetLightIntensity() {
         return skyLight.intensity;
+    }
+
+    // returns an enum integer representing what part of the day it is
+    public DaySection GetDaySection() {
+        if (dayTime < sunriseLength) {
+            return DaySection.sunrise;
+        }
+        else if (dayTime < sunriseLength + sunnyLength) {
+            return DaySection.daytime;
+        }
+        else if (dayTime < sunriseLength + sunnyLength + sunsetLength) {
+            return DaySection.sunset;
+        }
+        else{
+            return DaySection.night;
+        }
     }
 }
