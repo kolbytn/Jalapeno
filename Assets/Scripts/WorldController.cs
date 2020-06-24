@@ -50,6 +50,7 @@ public class WorldController : MonoBehaviour
     public Grid WorldGrid { private set; get; }
     public Tilemap WorldTilemap { private set; get; }
     public CameraController WorldCamera { private set; get; }
+    public DayCycle DayCycleController { private set; get; }
 
     void Start()
     {
@@ -58,6 +59,7 @@ public class WorldController : MonoBehaviour
         WorldGrid = GameObject.Find("Grid").GetComponent<Grid>();
         WorldTilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         WorldCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
+        DayCycleController = GameObject.Find("SkyLight").GetComponent<DayCycle>();
         instance = this;
 
         worldGenerator.GenerateWorld();
