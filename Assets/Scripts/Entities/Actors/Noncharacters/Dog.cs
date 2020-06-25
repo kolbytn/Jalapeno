@@ -7,6 +7,9 @@ public class Dog : Noncharacter {
 
     protected new void Start() {
         base.Start();
+
+        navAgent.updateRotation = false;
+        navAgent.updateUpAxis = false;
     }
 
     private void Update() {
@@ -15,23 +18,25 @@ public class Dog : Noncharacter {
         float distY = WorldController.Instance.Player.GetLocationY() - GetLocationY();
         Vector2 move = new Vector2(distX, distY);
 
-        if (move.magnitude > goalDistance) {
-            move.Normalize();
+        navAgent.SetDestination(new Vector2(WorldController.Instance.Player.GetLocationX(), WorldController.Instance.Player.GetLocationY()));
 
-            animator.SetFloat("Speed", maxSpeed);
-            animator.SetFloat("MoveX", move.x);
-            animator.SetFloat("MoveY", move.y);
+        //if (move.magnitude > goalDistance) {
+        //    move.Normalize();
 
-            Vector2 newPosition = rigidbody2d.position + move * maxSpeed * Time.deltaTime;
-            rigidbody2d.MovePosition(newPosition);
-        }
-        else {
-            animator.SetFloat("Speed", 0);
-            animator.SetFloat("MoveX", 0);
-            animator.SetFloat("MoveY", 0);
+        //    animator.SetFloat("Speed", maxSpeed);
+        //    animator.SetFloat("MoveX", move.x);
+        //    animator.SetFloat("MoveY", move.y);
 
-            rigidbody2d.velocity = new Vector2(0, 0);
-        }
+        //    Vector2 newPosition = rigidbody2d.position + move * maxSpeed * Time.deltaTime;
+        //    rigidbody2d.MovePosition(newPosition);
+        //}
+        //else {
+        //    animator.SetFloat("Speed", 0);
+        //    animator.SetFloat("MoveX", 0);
+        //    animator.SetFloat("MoveY", 0);
+
+        //    rigidbody2d.velocity = new Vector2(0, 0);
+        //}
     }
 
     public override IEntity ObjectFromString(string info) {
