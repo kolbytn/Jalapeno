@@ -10,6 +10,7 @@ public class WorldGenerator : MonoBehaviour {
     readonly double rockProbability = .001;
     readonly double treeProbability = .005;
     readonly double bushProbability = .005;
+    readonly double grassProbability = .05;
     readonly double obstacleSizeMean = 10;
     readonly double obstacleSizeStd = 5;
     bool[,] blocked;
@@ -147,14 +148,19 @@ public class WorldGenerator : MonoBehaviour {
                     }
                     continue;
                 }
+                else if (UnityEngine.Random.value < grassProbability) {
+                    IEntity worldObject = WorldController.Instance.AddPlant(WorldResources.Grass, i, j);
+                    ((Grass)worldObject).RandomStage();
+                    continue;
+                }
             }
         }
     }
 
-    IEntity AddObject(GameObject obj, int i, int j) {
+    public IEntity AddObject(GameObject obj, int i, int j, bool block=true) {
         Vector3 location = WorldController.Instance.WorldTilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
         WorldObject interactableObject = Instantiate(obj, location, Quaternion.identity).GetComponent<WorldObject>();
-        blocked[i, j] = true;
+        blocked[i, j] = block;
         WorldController.Instance.ObjectMap[i, j] = interactableObject;
         return interactableObject;
     }
@@ -208,5 +214,11 @@ public class WorldGenerator : MonoBehaviour {
                 blocked[i, j] = true;
             }
         }
+    }
+
+    public bool IsBlocked(int i, int j) {
+        if (i >= blocked.GetLength(0) || i < 0 || j >= blocked.GetLength(1) || j < 0)
+            return true;
+        return blocked[i, j];
     }
 }

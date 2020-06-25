@@ -5,8 +5,9 @@ using UnityEngine.Tilemaps;
 // Always update the resource member name when renaming classes
 public static class WorldResources {
 
-    public static GameObject WoodTree = Resources.Load<GameObject>("Prefabs/tree");
-    public static GameObject BerryBush = Resources.Load<GameObject>("Prefabs/BerryBush");
+    public static GameObject WoodTree = Resources.Load<GameObject>("Prefabs/Plants/tree");
+    public static GameObject BerryBush = Resources.Load<GameObject>("Prefabs/Plants/BerryBush");
+    public static GameObject Grass = Resources.Load<GameObject>("Prefabs/Plants/Grass");
     public static GameObject Player = Resources.Load<GameObject>("Prefabs/Player");
     public static GameObject Dog = Resources.Load<GameObject>("Prefabs/Dog");
     public static GameObject HighlightPrefab = Resources.Load<GameObject>("Prefabs/HighlightPrefab");
