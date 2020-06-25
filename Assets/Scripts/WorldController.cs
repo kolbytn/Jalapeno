@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.AI;
 
 public class WorldController : MonoBehaviour
 {
@@ -47,8 +48,10 @@ public class WorldController : MonoBehaviour
 
     private SaveManager saveManager;
     private WorldGenerator worldGenerator;
+    private NavMeshSurface2d navMesh;
     public Grid WorldGrid { private set; get; }
-    public Tilemap WorldTilemap { private set; get; }
+    public Tilemap GroundTilemap { private set; get; }
+    public Tilemap ObstacleTilemap { private set; get; }
     public CameraController WorldCamera { private set; get; }
     public DayCycle DayCycleController { private set; get; }
 
@@ -56,13 +59,18 @@ public class WorldController : MonoBehaviour
     {
         saveManager = new GameObject().AddComponent<SaveManager>();
         worldGenerator = new GameObject().AddComponent<WorldGenerator>();
+        navMesh = GameObject.Find("NavMesh").GetComponent<NavMeshSurface2d>();
         WorldGrid = GameObject.Find("Grid").GetComponent<Grid>();
-        WorldTilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
+        GroundTilemap = GameObject.Find("GroundTilemap").GetComponent<Tilemap>();
+        ObstacleTilemap = GameObject.Find("ObstacleTilemap").GetComponent<Tilemap>();
         WorldCamera = GameObject.Find("MainCamera").GetComponent<CameraController>();
         DayCycleController = GameObject.Find("SkyLight").GetComponent<DayCycle>();
         instance = this;
 
         worldGenerator.GenerateWorld();
+        navMesh.BuildNavMesh();
+        worldGenerator.PlaceActors();
+        navMesh.BuildNavMesh();
     }
 
     public Vector3 GetCellLocation(int col, int row)
@@ -79,7 +87,7 @@ public class WorldController : MonoBehaviour
 
     public void ChangeTile(int col, int row, Tile newTile)
     {
-        WorldTilemap.SetTile(new Vector3Int(col, row, 0), newTile);
+        GroundTilemap.SetTile(new Vector3Int(col, row, 0), newTile);
     }
 
     public void LoadGameFromFile(string fileName)

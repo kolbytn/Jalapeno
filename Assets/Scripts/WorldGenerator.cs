@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class WorldGenerator : MonoBehaviour {
 
-    readonly int width = 25;
-    readonly int height = 25;
+    readonly int width = 50;
+    readonly int height = 50;
     readonly int tileCount = 2;
     readonly double waterProbability = .001;
     readonly double rockProbability = .001;
@@ -21,6 +21,9 @@ public class WorldGenerator : MonoBehaviour {
         WorldController.Instance.ObjectMap = new WorldObject[width, height];
 
         IterateWorld();
+    }
+
+    public void PlaceActors() {
 
         WorldController.Instance.ActorList = new Actor[2];
 
@@ -69,19 +72,19 @@ public class WorldGenerator : MonoBehaviour {
                 if (i < 0 || i > WorldController.Instance.GroundMap.GetUpperBound(0) || j < 0 || j > WorldController.Instance.GroundMap.GetUpperBound(1)) {
 
                     if (i == -1 && j > -1 && j < WorldController.Instance.GroundMap.GetUpperBound(1)) {
-                        WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterLeftTile);
+                        WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterLeftTile);
                     }
                     else if (i == WorldController.Instance.GroundMap.GetUpperBound(0) + 1 && j > -1 && j <= WorldController.Instance.GroundMap.GetUpperBound(1)) {
-                        WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterRightTile);
+                        WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterRightTile);
                     }
                     else if (j == -1 && i > -1 && i <= WorldController.Instance.GroundMap.GetUpperBound(1)) {
-                        WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterBottomTile);
+                        WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterBottomTile);
                     }
                     else if (j == WorldController.Instance.GroundMap.GetUpperBound(1) + 1 && i > -1 && i <= WorldController.Instance.GroundMap.GetUpperBound(1)) {
-                        WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterTopTile);
+                        WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterTopTile);
                     }
                     else {
-                        WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterTile);
+                        WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.WaterTile);
                     }
                     continue;
                 }
@@ -97,11 +100,11 @@ public class WorldGenerator : MonoBehaviour {
                     tileIndex--;
                 }
                 if (tileIndex == 0) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.BlankTile);
+                    WorldController.Instance.GroundTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.BlankTile);
                     WorldController.Instance.GroundMap[i, j] = "BlankTile";
                 }
                 else {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GrassTile);
+                    WorldController.Instance.GroundTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GrassTile);
                     WorldController.Instance.GroundMap[i, j] = "GrassTile";
                 }
 
@@ -152,7 +155,7 @@ public class WorldGenerator : MonoBehaviour {
     }
 
     IEntity AddObject(GameObject obj, int i, int j) {
-        Vector3 location = WorldController.Instance.WorldTilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
+        Vector3 location = WorldController.Instance.GroundTilemap.GetCellCenterWorld(new Vector3Int(i, j, 0));
         WorldObject interactableObject = Instantiate(obj, location, Quaternion.identity).GetComponent<WorldObject>();
         blocked[i, j] = true;
         WorldController.Instance.ObjectMap[i, j] = interactableObject;
@@ -170,39 +173,39 @@ public class WorldGenerator : MonoBehaviour {
         for (int i = locationX; i < locationX + sizeX; i++) {
             for (int j = locationY; j < locationY + sizeY; j++) {
                 if (i == locationX && j == locationY) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[6]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[6]));
                     WorldController.Instance.GroundMap[i, j] = tiles[6];
                 }
                 else if (i == locationX + sizeX - 1 && j == locationY) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[8]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[8]));
                     WorldController.Instance.GroundMap[i, j] = tiles[8];
                 }
                 else if (i == locationX && j == locationY + sizeY - 1) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[0]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[0]));
                     WorldController.Instance.GroundMap[i, j] = tiles[0];
                 }
                 else if (i == locationX + sizeX - 1 && j == locationY + sizeY - 1) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[2]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[2]));
                     WorldController.Instance.GroundMap[i, j] = tiles[2];
                 }
                 else if (i == locationX) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[3]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[3]));
                     WorldController.Instance.GroundMap[i, j] = tiles[3];
                 }
                 else if (j == locationY) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[7]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[7]));
                     WorldController.Instance.GroundMap[i, j] = tiles[7];
                 }
                 else if (i == locationX + sizeX - 1) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[5]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[5]));
                     WorldController.Instance.GroundMap[i, j] = tiles[5];
                 }
                 else if (j == locationY + sizeY - 1) {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[1]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[1]));
                     WorldController.Instance.GroundMap[i, j] = tiles[1];
                 }
                 else {
-                    WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[4]));
+                    WorldController.Instance.ObstacleTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(tiles[4]));
                     WorldController.Instance.GroundMap[i, j] = tiles[4];
                 }
                 blocked[i, j] = true;

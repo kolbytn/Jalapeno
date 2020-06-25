@@ -98,7 +98,7 @@ public class SaveManager : MonoBehaviour {
         WorldController.Instance.GroundMap = Utils.Reshape2dArray(worldInfo.GroundArray, worldInfo.Width, worldInfo.Height);
         for (int i = 0; i < WorldController.Instance.Width; i++) {
             for (int j = 0; j < WorldController.Instance.Height; j++) {
-                WorldController.Instance.WorldTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(WorldController.Instance.GroundMap[i, j]));
+                WorldController.Instance.GroundTilemap.SetTile(new Vector3Int(i, j, 0), WorldResources.GetTile(WorldController.Instance.GroundMap[i, j]));
             }
         }
 
