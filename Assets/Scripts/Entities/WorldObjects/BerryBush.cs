@@ -32,7 +32,7 @@ public class BerryBush : WorldObject {
     public override void  Interact(Character user) {
         if (hasBerries) {
             RemoveBerries();
-            user.GiveItem(new Food(3));
+            user.GiveItem(new Berry(3));
         }
     }
 

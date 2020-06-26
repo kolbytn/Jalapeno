@@ -36,9 +36,6 @@ public class Player : Character {
         hotbar = GameObject.Find("Inventory").GetComponent<UiHotbar>();
 
         hotBarInventory.AddItem(new Tool());
-        hotBarInventory.AddItem(new Food(5));
-        hotBarInventory.AddItem(new Food(2));
-
 
         hotbar.SetInventory(hotBarInventory);
         hotbar.SetEquiped(equipedItemIndex);

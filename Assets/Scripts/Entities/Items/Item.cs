@@ -47,9 +47,7 @@ public abstract class Item : IEntity {
         return Quantity <= 0;
     }
 
-    public virtual Sprite GetIconSprite() {
-        return null;
-    }
+    public abstract Sprite GetIconSprite();
 
     public abstract string ObjectToString();
 

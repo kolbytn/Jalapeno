@@ -1,22 +1,20 @@
 using UnityEngine;
 
-public class Food : Item {
+public abstract class Food : Item {
 
     public Food(int Quantity=1) : base(Quantity) {
     }
 
     public override void UseL(Character user) {
-        user.Eat(Calories());
-        Quantity--;
+        user.DefaultAction();
     }
     
     public override void UseR(Character user) {
-
+        user.Eat(Calories());
+        Quantity--;
     }
 
-    public virtual int Calories() {
-        return 10;
-    }
+    public abstract int Calories();
 
     public override Sprite GetIconSprite() {
         return WorldResources.BerriesIcon;

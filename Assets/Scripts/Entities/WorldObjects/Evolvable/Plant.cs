@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plant : WorldObject, IEvolvable
+public abstract class Plant : WorldObject, IEvolvable
 {
     protected Gene genes;
     public int growthStage{
@@ -65,21 +65,21 @@ public class Plant : WorldObject, IEvolvable
 
 
     
-    protected virtual void UpdateAnimation() {}
+    protected abstract void UpdateAnimation();
 
-    protected virtual void SetGrowthStageTimes() { }
+    protected abstract void SetGrowthStageTimes();
 
-    protected virtual int TotalGrowthStages() { return 0;}
+    protected abstract int TotalGrowthStages();
 
-    protected virtual void UpdateStageChange() {}
+    protected abstract void UpdateStageChange();
 
-    public override void Interact(Character user) {}
+    // public override void Interact(Character user) {}
 
-    public override string ObjectToString(){
-        return "";
-    }
+    // public override string ObjectToString(){
+    //     return "";
+    // }
 
-    public override IEntity ObjectFromString(string info){
-        return null;
-    }
+    // public override IEntity ObjectFromString(string info){
+    //     return null;
+    // }
 }
