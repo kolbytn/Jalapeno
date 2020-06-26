@@ -33,7 +33,10 @@ public class Grass : Plant
 
 
     public override void Interact(Character user){
-        
+        if (growthStage == 2) {
+            user.GiveItem(new GrassSeed(1));
+            SetGrowthStage(3);
+        }
     }
 
     public override string ObjectToString(){

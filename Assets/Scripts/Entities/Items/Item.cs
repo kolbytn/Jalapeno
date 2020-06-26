@@ -15,7 +15,9 @@ public abstract class Item : IEntity {
         }
     }
 
-    public abstract void Use(Character user);
+    public abstract void UseL(Character user);
+
+    public abstract void UseR(Character user);
 
     public int AddQuantity(int q) {
         if(Quantity + q <= MaxQuantity()) {

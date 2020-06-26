@@ -70,16 +70,16 @@ public class WorldController : MonoBehaviour
 
     void Update()
     {
-        List<int> toRemove = new List<int>();
+        List<Plant> toRemove = new List<Plant>();
         for(int i=0; i<PlantList.Count; i++) {
             Plant plant = PlantList[i];
             bool died = plant.UpdateGrowth();
             if (died) {
-                toRemove.Add(i);
+                toRemove.Add(plant);
             }
         }
-        foreach(int i in toRemove) {
-            PlantList.RemoveAt(i);
+        foreach(Plant p in toRemove) {
+            PlantList.Remove(p);
         }
     }
 

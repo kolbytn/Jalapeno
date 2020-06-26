@@ -13,14 +13,18 @@ public class Player : Character {
     public Light2D flashLight;
 
 
-    readonly float hungerSpeed = 1;
-    readonly float healthCatchUpSpeed = 0.1f;
+    readonly float hungerSpeed = 0.5f;
+    readonly float starvationSpeed = 2f;
 
     float horizontal = 0;
     float vertical = 0;
-    bool mouseDown = false;
-    bool mouseUp = false;
+    bool mouseDownL = false;
+    bool mouseUpL = false;
+    bool mouseDownR = false;
+    bool mouseUpR = false;
     float mouseScroll = 0; //negative down, 0 no change, positive up
+    float mouseX; //absolute world coordinates
+    float mouseY;
 
     protected new void Start() {
         base.Start();
@@ -49,9 +53,10 @@ public class Player : Character {
             }
             hungerBar.UpdateValue(hunger);
         }
-
-        health += (hunger - health) * healthCatchUpSpeed * Time.deltaTime;
-        healthBar.UpdateValue(health);
+        else {
+            health -= starvationSpeed * Time.deltaTime;
+            healthBar.UpdateValue(health);
+        }
 
         flashLight.intensity = 1 - WorldController.Instance.DayCycleController.GetLightIntensity();
 
@@ -73,19 +78,26 @@ public class Player : Character {
         CollectInputs();
         animator.SetFloat("Speed", Mathf.Abs(horizontal) + Mathf.Abs(vertical));
 
-        if (mouseDown && !isInteracting) {
-            isInteracting = true;
-            if (equipedItem != null) {
-                equipedItem.Use(this);
-            }
-            else {
-                // default behavior
-                if (interactableTile != null){
-                    interactableTile.Interact(this);
+        if (!isInteracting) {
+            if (mouseDownL) {
+                isInteracting = true;
+                if (equipedItem != null) {
+                    equipedItem.UseL(this);
+                }
+                else {
+                    // default behavior
+                    DefaultAction();
                 }
             }
+            else if (mouseDownR) {
+                isInteracting = true;
+                if (equipedItem != null) {
+                    equipedItem.UseR(this);
+                }
+            }
+            
         }
-        else if(mouseUp) {
+        else if(mouseUpL || mouseUpR) {
             isInteracting = false;
         }
 
@@ -126,14 +138,41 @@ public class Player : Character {
         }
     }
 
+    public override bool CalcInteractableGridPos() {
+        float closest_dist = 1000;
+        int col = gridLoc.col;
+        int row = gridLoc.row;
+        int newCol=0;
+        int newRow=0;
+        for (int i=-1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Vector3 cell_loc = WorldController.Instance.GetCellLocation(col+j, row+i);
+                float dist = Vector3.Distance(cell_loc, new Vector3(mouseX, mouseY, 0));
+                if (dist < closest_dist) {
+
+                    closest_dist = dist;
+                    newCol = col+j;
+                    newRow = row+i;
+                }
+            }
+        }
+        bool changed = (newCol != interactGridLoc.col || newRow != interactGridLoc.row);
+        interactGridLoc.col = newCol;
+        interactGridLoc.row = newRow;
+        interactableTile = WorldController.Instance.GetInteractableAt(interactGridLoc.col, interactGridLoc.row);
+        return changed;
+    }
+
 
     // collects inputs and calculates look direction
     void CollectInputs() {
 
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
-        mouseDown = Input.GetMouseButtonDown(0);
-        mouseUp = Input.GetMouseButtonUp(0);
+        mouseDownL = Input.GetMouseButtonDown(0);
+        mouseUpL = Input.GetMouseButtonUp(0);
+        mouseDownR = Input.GetMouseButtonDown(1);
+        mouseUpR = Input.GetMouseButtonUp(1);
         mouseScroll = Input.mouseScrollDelta.y;
 
         Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -148,5 +187,8 @@ public class Player : Character {
         if (lookAngle < 0) {
             lookAngle += 360;
         }
+
+        mouseX = x1;
+        mouseY = y1;
     }
 }

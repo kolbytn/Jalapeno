@@ -34,6 +34,8 @@ public static class WorldResources {
 
     public static Sprite BerriesIcon = Resources.Load<Sprite>("ItemIcons/Berries");
     public static Sprite ShovelIcon = Resources.Load<Sprite>("ItemIcons/Shovel");
+    public static Sprite GrainIcon = Resources.Load<Sprite>("ItemIcons/Grain");
+    public static Sprite GrassSeedIcon = Resources.Load<Sprite>("ItemIcons/GrassSeeds");
 
     public static GameObject GetGameObject(string name) {
         return (GameObject)Type.GetType("WorldResources").GetField(name)?.GetValue(null);

@@ -77,7 +77,7 @@ public abstract class Character : Actor {
 
     // updates the human's interactable grid location and tile based on look angle
     // returns true if the location changed
-    public bool CalcInteractableGridPos() {
+    public virtual bool CalcInteractableGridPos() {
 
         int locCol = 0;
         int locRow = 0;
@@ -119,6 +119,16 @@ public abstract class Character : Actor {
         if (hunger > maxHunger) {
             hunger = maxHunger;
         }
+    }
+
+    public virtual void DefaultAction() {
+        if (interactableTile != null){
+            interactableTile.Interact(this);
+        }
+    }
+
+    public bool PlaceObject(GameObject obj) {
+        return WorldController.Instance.AddPlant(obj, interactGridLoc.col, interactGridLoc.row) != null;
     }
 
     [Serializable]

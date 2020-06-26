@@ -5,9 +5,17 @@ public class Food : Item {
     public Food(int Quantity=1) : base(Quantity) {
     }
 
-    public override void Use(Character user) {
-        user.Eat(15);
+    public override void UseL(Character user) {
+        user.Eat(Calories());
         Quantity--;
+    }
+    
+    public override void UseR(Character user) {
+
+    }
+
+    public virtual int Calories() {
+        return 10;
     }
 
     public override Sprite GetIconSprite() {

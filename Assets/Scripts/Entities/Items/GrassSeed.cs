@@ -1,23 +1,25 @@
 using UnityEngine;
 
-public class Tool : Item {
+public class GrassSeed : Item {
 
-    public Tool(int Quantity=1) : base(Quantity) {
+    public GrassSeed(int Quantity=1) : base(Quantity) {
     }
 
     public override void UseL(Character user) {
-        // if an item needs the interactable tile it will have to check if it's null
-        if (user.GetInteractableTile() != null){
-            user.GetInteractableTile().Interact(user);
+        if (user.PlaceObject(WorldResources.Grass)) {
+            Quantity--;
         }
     }
 
     public override void UseR(Character user) {
-        
     }
 
     public override Sprite GetIconSprite() {
-        return WorldResources.ShovelIcon;
+        return WorldResources.GrassSeedIcon;
+    }
+
+    public override int MaxQuantity() {
+        return 100;
     }
 
     public override string ObjectToString() {
